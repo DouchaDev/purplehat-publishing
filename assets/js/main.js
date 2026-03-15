@@ -299,21 +299,37 @@ function initCarousel() {
   prevBtn?.addEventListener('click', () => { currentIndex--; updateTrack(); });
   nextBtn?.addEventListener('click', () => { currentIndex++; updateTrack(); });
 
-  // Touch/pointer swipe
+  // Touch/pointer swipe — hasMoved flag prevents click suppression on tap
+  let hasMoved = false;
+
   track.addEventListener('pointerdown', e => {
     startX = e.clientX;
     isDragging = true;
+    hasMoved = false;
     track.setPointerCapture(e.pointerId);
   });
 
   track.addEventListener('pointermove', e => {
     if (!isDragging) return;
-    e.preventDefault();
+    if (Math.abs(e.clientX - startX) > 6) {
+      hasMoved = true;
+      e.preventDefault(); // only prevent scroll when actually dragging
+    }
   }, { passive: false });
 
   track.addEventListener('pointerup', e => {
     if (!isDragging) return;
     isDragging = false;
+
+    if (!hasMoved) {
+      // Tap — pointer capture sends events to track, so find the card manually
+      const card = document.elementFromPoint(e.clientX, e.clientY)?.closest('.novel-card');
+      if (card?.dataset.id) {
+        window.location.href = `novel-detail.html?id=${card.dataset.id}`;
+      }
+      return;
+    }
+
     const delta = startX - e.clientX;
     if (Math.abs(delta) > 48) {
       const max = Math.max(0, totalCards() - getVisibleCount());
@@ -322,6 +338,8 @@ function initCarousel() {
       updateTrack();
     }
   });
+
+  track.addEventListener('pointercancel', () => { isDragging = false; });
 
   window.addEventListener('resize', updateTrack);
   updateTrack();

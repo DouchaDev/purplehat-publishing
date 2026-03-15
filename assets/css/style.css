@@ -26,9 +26,9 @@
 
 :root {
   /* Colours — drawn from Raphael's Saint George & The Dark Crystal */
-  --color-bg:          #1C1008;   /* warm dark brown — slightly lighter for texture contrast */
-  --color-bg-surface:  #251608;   /* card/section surface */
-  --color-bg-elevated: #301C09;   /* elevated elements */
+  --color-bg:          #161009;   /* warm dark brown — dark enough to feel rich, light enough to show grain */
+  --color-bg-surface:  #201409;   /* card/section surface */
+  --color-bg-elevated: #2A1A0A;   /* elevated elements */
   --color-gold:        #C9A96E;   /* primary accent — Raphael gold */
   --color-gold-light:  #E5C98A;   /* hover gold */
   --color-plum:        #3D2B5E;   /* Dark Crystal purple */
@@ -48,6 +48,15 @@
   --max-width:   1200px;
   --radius:      4px;
   --transition:  0.3s ease;
+
+  /* Weave Params */
+  --weavescale-transparent: 4px;   /* horizontal spacing of weave lines */
+  --weavescale-xs: 128px;   /* horizontal spacing of weave lines */
+  --weavescale-sm: 192px;   /* horizontal spacing of weave lines */
+  --weavescale-md: 128px;  /* horizontal spacing of weave lines */
+  --weavescale-lg: 192px;  /* horizontal spacing of weave lines */
+  --weave-degrees-1: 135deg;  /* angle of first weave layer */
+  --weave-degrees-2: 45deg;   /* angle of second weave layer */
 }
 
 
@@ -82,18 +91,18 @@ body {
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
     repeating-linear-gradient(
-      135deg,
+      var(--weave-degrees-1),
       transparent,
-      transparent 2px,
-      rgba(180, 118, 38, 0.028) 2px,
-      rgba(180, 118, 38, 0.028) 3px
+      transparent var(--weavescale-transparent),
+      rgba(180, 118, 38, 0.030) var(--weavescale-xs),
+      rgba(180, 118, 38, 0.030) var(--weavescale-sm)
     ),
     repeating-linear-gradient(
-      45deg,
+      var(--weave-degrees-2),
       transparent,
-      transparent 2px,
-      rgba(180, 118, 38, 0.022) 2px,
-      rgba(180, 118, 38, 0.022) 3px
+      transparent var(--weavescale-transparent),
+      rgba(180, 118, 38, 0.024) var(--weavescale-xs),
+      rgba(180, 118, 38, 0.024) var(--weavescale-sm)
     );
 }
 
@@ -360,6 +369,22 @@ p:last-child {
   overflow: hidden;
   padding: calc(var(--nav-height) + 3rem) 1.5rem 5rem;
   background:
+    /* Purple-tinted weave — sits on top of gradients, matches the plum atmosphere */
+    repeating-linear-gradient(
+      var(--weave-degrees-1),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(80, 55, 140, 0.045) var(--weavescale-md),
+      rgba(80, 55, 140, 0.045) var(--weavescale-lg)
+    ),
+    repeating-linear-gradient(
+      var(--weave-degrees-2),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(80, 55, 140, 0.036) var(--weavescale-md),
+      rgba(80, 55, 140, 0.036) var(--weavescale-lg)
+    ),
+    /* Atmosphere gradients */
     radial-gradient(ellipse at 15% 60%, rgba(61,  43, 94,  0.45) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 25%, rgba(74, 139,127,  0.22) 0%, transparent 48%),
     radial-gradient(ellipse at 50% 85%, rgba(168, 48, 32,  0.18) 0%, transparent 45%),
@@ -367,12 +392,12 @@ p:last-child {
     linear-gradient(170deg, #0E0B07 0%, #1C1008 45%, #0A0806 100%);
 }
 
-/* Parchment noise layer over hero */
+/* Warm amber noise layer over hero */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.6 0 0 0 0.04 0.35 0 0 0 0.02 0.5 0 0 0 0.06 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
   pointer-events: none;
 }
 
@@ -486,8 +511,8 @@ p:last-child {
   background-color: var(--color-bg-surface);
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.19 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(135deg, transparent, transparent 2px, rgba(180,118,38,0.032) 2px, rgba(180,118,38,0.032) 3px),
-    repeating-linear-gradient( 45deg, transparent, transparent 2px, rgba(180,118,38,0.026) 2px, rgba(180,118,38,0.026) 3px);
+    repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.034) var(--weavescale-xs), rgba(180,118,38,0.034) var(--weavescale-sm)),
+    repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.028) var(--weavescale-xs), rgba(180,118,38,0.028) var(--weavescale-sm));
 }
 
 /* Pull-quote — most prominent parchment moment on the page */
@@ -497,8 +522,8 @@ p:last-child {
   background-color: #2C1A09;
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.07 0.4 0 0 0 0.04 0.15 0 0 0 0.01 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(135deg, transparent, transparent 2px, rgba(180,118,38,0.038) 2px, rgba(180,118,38,0.038) 3px),
-    repeating-linear-gradient( 45deg, transparent, transparent 2px, rgba(180,118,38,0.030) 2px, rgba(180,118,38,0.030) 3px);
+    repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.040) var(--weavescale-xs), rgba(180,118,38,0.040) var(--weavescale-sm)),
+    repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.032) var(--weavescale-xs), rgba(180,118,38,0.032) var(--weavescale-sm));
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   text-align: center;

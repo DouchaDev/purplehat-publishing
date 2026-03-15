@@ -214,6 +214,9 @@ function renderFeaturedNovels() {
       </div>
     `;
   }).join('');
+
+  // Cards were injected after initScrollReveal() ran — re-observe new .reveal elements
+  initScrollReveal();
 }
 
 

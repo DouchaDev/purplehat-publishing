@@ -505,6 +505,33 @@ p:last-child {
 
 .section {
   padding: 5rem 1.5rem;
+  position: relative;
+}
+
+/* ─── Option D gold divider — fades in from both edges, glows gently ─── */
+/* Sits at the top of the first content section below any purple hero/banner */
+.hero + .section::before,
+.page-hero + .section::before,
+.page-hero + .author-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 169, 110, 0.25) 12%,
+    var(--color-gold) 38%,
+    var(--color-gold) 62%,
+    rgba(201, 169, 110, 0.25) 88%,
+    transparent 100%
+  );
+  box-shadow:
+    0 1px 18px rgba(201, 169, 110, 0.22),
+    0 0   8px rgba(201, 169, 110, 0.14);
+  pointer-events: none;
 }
 
 .section-inner {
@@ -587,7 +614,6 @@ p:last-child {
     linear-gradient(170deg, #0E0B07 0%, #1A1008 100%);
   /* weave fixed; atmosphere scrolls with element */
   background-attachment: fixed, fixed, scroll, scroll, scroll;
-  border-bottom: 1px solid var(--color-border);
   position: relative;
   overflow: hidden;
 }

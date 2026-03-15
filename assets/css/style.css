@@ -233,10 +233,10 @@ p:last-child {
   width: 100%;
 }
 
-/* Purple hat icon — top right */
+/* Purple hat icon — top left */
 .nav-home-icon {
   position: absolute;
-  right: 1.5rem;
+  left: 1.5rem;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -255,11 +255,11 @@ p:last-child {
   height: 36px;
 }
 
-/* Hamburger button — hidden on desktop */
+/* Hamburger button — hidden on desktop, top right on mobile */
 .nav-toggle {
   display: none;
   position: absolute;
-  left: 1.5rem;
+  right: 1.5rem;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -279,13 +279,13 @@ p:last-child {
   transition: all var(--transition);
 }
 
-/* Mobile nav overlay */
+/* Mobile nav overlay — z-index above header (100) */
 .nav-overlay {
   display: none;
   position: fixed;
   inset: 0;
   background: rgba(12, 9, 6, 0.97);
-  z-index: 99;
+  z-index: 150;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -297,6 +297,7 @@ p:last-child {
 }
 
 .nav-overlay .nav-links {
+  display: flex;          /* override the mobile display:none on .nav-links */
   flex-direction: column;
   gap: 2rem;
   text-align: center;

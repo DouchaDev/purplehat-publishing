@@ -104,6 +104,9 @@ body {
       rgba(180, 118, 38, 0.024) var(--weavescale-xs),
       rgba(180, 118, 38, 0.024) var(--weavescale-sm)
     );
+  /* noise scrolls with content; weave layers are fixed to viewport so the
+     pattern is one continuous sheet — no restart at section boundaries */
+  background-attachment: scroll, fixed, fixed;
 }
 
 main {
@@ -390,14 +393,17 @@ p:last-child {
     radial-gradient(ellipse at 50% 85%, rgba(168, 48, 32,  0.18) 0%, transparent 45%),
     radial-gradient(ellipse at 50% 10%, rgba(201,169,110,  0.08) 0%, transparent 60%),
     linear-gradient(170deg, #0E0B07 0%, #1C1008 45%, #0A0806 100%);
+  /* weave (layers 1–2) fixed to viewport; atmosphere gradients scroll with element */
+  background-attachment: fixed, fixed, scroll, scroll, scroll, scroll, scroll;
 }
 
-/* Warm amber noise layer over hero */
+/* Warm amber noise layer over hero — fixed so it aligns with body noise */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.6 0 0 0 0.04 0.35 0 0 0 0.02 0.5 0 0 0 0.06 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-attachment: fixed;
   pointer-events: none;
 }
 
@@ -513,6 +519,7 @@ p:last-child {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.19 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
     repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.034) var(--weavescale-xs), rgba(180,118,38,0.034) var(--weavescale-sm)),
     repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.028) var(--weavescale-xs), rgba(180,118,38,0.028) var(--weavescale-sm));
+  background-attachment: scroll, fixed, fixed;
 }
 
 /* Pull-quote — most prominent parchment moment on the page */
@@ -524,6 +531,7 @@ p:last-child {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.07 0.4 0 0 0 0.04 0.15 0 0 0 0.01 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
     repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.040) var(--weavescale-xs), rgba(180,118,38,0.040) var(--weavescale-sm)),
     repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.032) var(--weavescale-xs), rgba(180,118,38,0.032) var(--weavescale-sm));
+  background-attachment: scroll, fixed, fixed;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   text-align: center;
@@ -558,9 +566,27 @@ p:last-child {
   align-items: flex-end;
   padding: calc(var(--nav-height) + 3rem) 1.5rem 3rem;
   background:
+    /* Purple weave — fixed to viewport, continuous with hero weave */
+    repeating-linear-gradient(
+      var(--weave-degrees-1),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(80, 55, 140, 0.045) var(--weavescale-md),
+      rgba(80, 55, 140, 0.045) var(--weavescale-lg)
+    ),
+    repeating-linear-gradient(
+      var(--weave-degrees-2),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(80, 55, 140, 0.036) var(--weavescale-md),
+      rgba(80, 55, 140, 0.036) var(--weavescale-lg)
+    ),
+    /* Atmosphere */
     radial-gradient(ellipse at 20% 80%, rgba(61, 43, 94, 0.4) 0%, transparent 55%),
     radial-gradient(ellipse at 80% 20%, rgba(74,139,127, 0.2) 0%, transparent 50%),
     linear-gradient(170deg, #0E0B07 0%, #1A1008 100%);
+  /* weave fixed; atmosphere scrolls with element */
+  background-attachment: fixed, fixed, scroll, scroll, scroll;
   border-bottom: 1px solid var(--color-border);
   position: relative;
   overflow: hidden;
@@ -1301,6 +1327,21 @@ p:last-child {
   /* Hero: tighter padding */
   .hero {
     padding-bottom: 4rem;
+  }
+}
+
+
+/* iOS Safari / touch-device fallback — background-attachment:fixed is broken
+   on most mobile browsers (renders as scroll or causes repaint jank).
+   On touch devices the weave restarts per-section, which is acceptable. */
+@media (hover: none) and (pointer: coarse) {
+  body,
+  .section-dark,
+  .pull-quote,
+  .hero,
+  .hero::before,
+  .page-hero {
+    background-attachment: scroll;
   }
 }
 

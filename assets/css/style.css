@@ -26,9 +26,9 @@
 
 :root {
   /* Colours — drawn from Raphael's Saint George & The Dark Crystal */
-  --color-bg:          #120E0A;   /* near-black warm brown */
-  --color-bg-surface:  #1C1510;   /* card/section surface */
-  --color-bg-elevated: #281D14;   /* elevated elements */
+  --color-bg:          #1C1008;   /* warm dark brown — slightly lighter for texture contrast */
+  --color-bg-surface:  #251608;   /* card/section surface */
+  --color-bg-elevated: #301C09;   /* elevated elements */
   --color-gold:        #C9A96E;   /* primary accent — Raphael gold */
   --color-gold-light:  #E5C98A;   /* hover gold */
   --color-plum:        #3D2B5E;   /* Dark Crystal purple */
@@ -72,8 +72,29 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* Subtle parchment-grain texture */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  /*
+    Parchment grain — three layers stacked:
+    1. Warm amber-tinted SVG turbulence noise (feColorMatrix shifts R/G/B so
+       the grain reads as warm gold rather than invisible grey on dark brown)
+    2. 135° repeating diagonal — one direction of the linen crosshatch
+    3.  45° repeating diagonal — other direction, together forming a canvas weave
+  */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 2px,
+      rgba(180, 118, 38, 0.028) 2px,
+      rgba(180, 118, 38, 0.028) 3px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      rgba(180, 118, 38, 0.022) 2px,
+      rgba(180, 118, 38, 0.022) 3px
+    );
 }
 
 main {
@@ -461,13 +482,23 @@ p:last-child {
 }
 
 .section-dark {
+  /* Slightly stronger warm grain on mid-tone surfaces */
   background-color: var(--color-bg-surface);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.19 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(135deg, transparent, transparent 2px, rgba(180,118,38,0.032) 2px, rgba(180,118,38,0.032) 3px),
+    repeating-linear-gradient( 45deg, transparent, transparent 2px, rgba(180,118,38,0.026) 2px, rgba(180,118,38,0.026) 3px);
 }
 
-/* Pull-quote */
+/* Pull-quote — most prominent parchment moment on the page */
 .pull-quote {
   padding: 4.5rem 2rem;
-  background: var(--color-bg-surface);
+  /* Warmer, lighter surface + strongest grain — this is the "Dark Crystal parchment" strip */
+  background-color: #2C1A09;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.07 0.4 0 0 0 0.04 0.15 0 0 0 0.01 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(135deg, transparent, transparent 2px, rgba(180,118,38,0.038) 2px, rgba(180,118,38,0.038) 3px),
+    repeating-linear-gradient( 45deg, transparent, transparent 2px, rgba(180,118,38,0.030) 2px, rgba(180,118,38,0.030) 3px);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   text-align: center;

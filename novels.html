@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Novels — explore all fantasy fiction by Hayden, published by Purplehat Publishing.">
+  <title>Novels — Purplehat Publishing</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ═══ HEADER / NAV ═════════════════════════════ -->
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+      <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hayden.html">Hayden</a></li>
+        <li><a href="novels.html">Novels</a></li>
+        <li><a href="concepts.html">Concepts/Fan Art</a></li>
+      </ul>
+      <a href="index.html" class="nav-home-icon" aria-label="Home">
+        <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
+      </a>
+    </nav>
+  </header>
+
+  <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
+    <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hayden.html">Hayden</a></li>
+      <li><a href="novels.html">Novels</a></li>
+      <li><a href="concepts.html">Concepts/Fan Art</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════ -->
+  <main>
+
+    <!-- Page hero banner -->
+    <section class="page-hero" aria-label="Novels page header">
+      <div class="page-hero-content">
+        <h1>The Novels</h1>
+        <p>Worlds forged in darkness and light</p>
+      </div>
+    </section>
+
+
+    <!-- Carousel section -->
+    <section class="section" aria-labelledby="carousel-heading">
+      <div class="section-inner">
+        <h2 class="section-heading reveal" id="carousel-heading">All Titles</h2>
+        <p class="section-sub reveal">Hover to explore &middot; Click to discover &middot; Swipe on mobile</p>
+        <div class="gold-divider reveal"></div>
+
+        <!--
+          Carousel: cards are injected by main.js renderNovelCards()
+          Add novels by editing the NOVELS array in assets/js/main.js
+        -->
+        <div class="carousel-wrapper reveal" aria-label="Novel carousel">
+          <button class="carousel-btn carousel-btn-prev" aria-label="Previous novels" disabled>
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+          </button>
+          <div class="carousel-track-outer">
+            <div class="carousel-track" role="list">
+              <!-- Cards injected by main.js -->
+            </div>
+          </div>
+          <button class="carousel-btn carousel-btn-next" aria-label="Next novels">
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <!-- Carousel hint -->
+        <p style="text-align:center;margin-top:2rem;font-size:0.78rem;color:var(--color-muted);letter-spacing:0.1em" class="reveal">
+          Click any novel to read the full synopsis
+        </p>
+      </div>
+    </section>
+
+
+    <!-- Coming soon / newsletter teaser -->
+    <section class="pull-quote" aria-label="Upcoming novels">
+      <blockquote class="reveal">
+        &ldquo;New worlds are always in the making.&rdquo;
+        <cite>— Follow on socials for the latest news</cite>
+      </blockquote>
+    </section>
+
+  </main>
+
+
+  <!-- ═══ FOOTER ═══════════════════════════════════ -->
+  <footer class="site-footer" id="site-footer" aria-label="Site footer"></footer>
+
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

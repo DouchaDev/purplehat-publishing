@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Hayden — fantasy author and creator of epic worlds. Biography, writing journey, and inspiration.">
+  <title>Hayden — Purplehat Publishing</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    /* Hayden page — author photo + bio layout */
+    .author-section {
+      padding: 5rem 1.5rem;
+    }
+
+    .author-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .author-photo-wrap {
+      position: sticky;
+      top: calc(var(--nav-height) + 2rem);
+    }
+
+    .author-photo {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      background: linear-gradient(145deg, #2A1F30 0%, #1A1A2E 50%, #0E1A1C 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .author-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .author-photo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .author-photo-placeholder i {
+      font-size: 3rem;
+      color: var(--color-plum-light);
+      opacity: 0.5;
+    }
+
+    .author-photo-placeholder span {
+      font-family: var(--font-heading);
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    .author-bio h2 {
+      margin-bottom: 0.4rem;
+    }
+
+    .author-bio .bio-subtitle {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-teal);
+      margin-bottom: 2rem;
+    }
+
+    .author-bio p {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--color-text);
+    }
+
+    .author-bio p + p {
+      margin-top: 0;
+    }
+
+    /* Inspiration / influences section */
+    .influences-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .influence-card {
+      background: var(--color-bg-elevated);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .influence-card i {
+      font-size: 1.6rem;
+      color: var(--color-gold);
+      margin-bottom: 0.6rem;
+      opacity: 0.75;
+    }
+
+    .influence-card h4 {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.35rem;
+    }
+
+    .influence-card p {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 767px) {
+      .author-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .author-photo-wrap {
+        position: static;
+        max-width: 280px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER / NAV ═════════════════════════════ -->
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+      <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hayden.html">Hayden</a></li>
+        <li><a href="novels.html">Novels</a></li>
+        <li><a href="concepts.html">Concepts/Fan Art</a></li>
+      </ul>
+      <a href="index.html" class="nav-home-icon" aria-label="Home">
+        <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
+      </a>
+    </nav>
+  </header>
+
+  <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
+    <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hayden.html">Hayden</a></li>
+      <li><a href="novels.html">Novels</a></li>
+      <li><a href="concepts.html">Concepts/Fan Art</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════ -->
+  <main>
+
+    <!-- Page hero banner -->
+    <section class="page-hero" aria-label="Author page header">
+      <div class="page-hero-content">
+        <h1>Hayden</h1>
+        <p>Fantasy author &amp; world-builder</p>
+      </div>
+    </section>
+
+
+    <!-- Author bio -->
+    <section class="author-section" aria-labelledby="bio-heading">
+      <div class="author-inner">
+
+        <!-- Photo -->
+        <div class="author-photo-wrap reveal">
+          <div class="author-photo">
+            <!--
+              To add your photo:
+              Replace the placeholder div below with:
+              <img src="assets/images/hayden-photo.jpg" alt="Hayden, fantasy author">
+            -->
+            <div class="author-photo-placeholder">
+              <i class="fas fa-user" aria-hidden="true"></i>
+              <span>Author photo<br>coming soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bio text -->
+        <div class="author-bio">
+          <h2 id="bio-heading" class="reveal">About the Author</h2>
+          <p class="bio-subtitle reveal">Fantasy writer &middot; World-builder &middot; Storyteller</p>
+          <div class="gold-divider reveal" style="margin-left:0;margin-right:auto"></div>
+
+          <!--
+            Replace the paragraphs below with your own biography.
+            Keep the class="reveal" on each paragraph for the scroll animation.
+          -->
+          <p class="reveal">
+            Replace this paragraph with a compelling introduction. Who are you? What drives you to write fantasy?
+            A great opening line hooks readers and makes them want to know more about the person behind the stories.
+          </p>
+          <p class="reveal">
+            Where did your love of fantasy begin? This is a good place to talk about childhood inspirations,
+            favourite books, films, or worlds that shaped your imagination. Be specific — readers connect
+            with authentic detail.
+          </p>
+          <p class="reveal">
+            What are you working on? What themes run through your writing?
+            This is your chance to tease the worlds you are building and hint at what is coming next.
+          </p>
+          <p class="reveal">
+            A personal note to finish: where do you write, what fuels your creativity, what do you hope
+            readers take away from your stories? Let your personality come through.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Inspirations / writing world -->
+    <section class="section section-dark" aria-labelledby="influences-heading">
+      <div class="section-inner">
+        <h2 class="section-heading reveal" id="influences-heading">Influences &amp; Inspirations</h2>
+        <p class="section-sub reveal">The worlds that shaped the worlds</p>
+        <div class="gold-divider reveal"></div>
+        <div class="influences-grid">
+          <div class="influence-card reveal">
+            <i class="fas fa-book-open" aria-hidden="true"></i>
+            <h4>Mythology</h4>
+            <p>Ancient legends, forgotten gods, and the timeless battle between order and chaos.</p>
+          </div>
+          <div class="influence-card reveal">
+            <i class="fas fa-dragon" aria-hidden="true"></i>
+            <h4>Epic Fantasy</h4>
+            <p>Vast worlds, high stakes, and heroes tested to the very edge of their courage.</p>
+          </div>
+          <div class="influence-card reveal">
+            <i class="fas fa-gem" aria-hidden="true"></i>
+            <h4>Dark Aesthetics</h4>
+            <p>Beauty found in shadow — crystalline depths, ancient stone, and things older than memory.</p>
+          </div>
+          <div class="influence-card reveal">
+            <i class="fas fa-feather-alt" aria-hidden="true"></i>
+            <h4>Lyrical Prose</h4>
+            <p>Language that sings — every sentence chosen to carry weight and meaning.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- CTA strip -->
+    <section class="section" style="text-align:center" aria-label="Call to action">
+      <div class="section-inner" style="max-width:600px">
+        <h2 class="reveal">Ready to Explore?</h2>
+        <div class="gold-divider reveal"></div>
+        <p class="reveal" style="color:var(--color-muted);font-style:italic;margin-bottom:2rem">
+          Step into the worlds Hayden has built — where every page reveals something new.
+        </p>
+        <div class="reveal" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+          <a href="novels.html" class="btn btn-primary">View the Novels</a>
+          <a href="concepts.html" class="btn btn-outline">Concepts &amp; Fan Art</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ═══ FOOTER ═══════════════════════════════════ -->
+  <footer class="site-footer" id="site-footer" aria-label="Site footer"></footer>
+
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

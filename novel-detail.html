@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Novel details — Purplehat Publishing">
+  <title>Novel — Purplehat Publishing</title>
+  <!-- Title updated dynamically by main.js -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ═══ HEADER / NAV ═════════════════════════════ -->
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+      <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hayden.html">Hayden</a></li>
+        <li><a href="novels.html">Novels</a></li>
+        <li><a href="concepts.html">Concepts/Fan Art</a></li>
+      </ul>
+      <a href="index.html" class="nav-home-icon" aria-label="Home">
+        <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
+      </a>
+    </nav>
+  </header>
+
+  <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
+    <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hayden.html">Hayden</a></li>
+      <li><a href="novels.html">Novels</a></li>
+      <li><a href="concepts.html">Concepts/Fan Art</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════ -->
+  <main>
+    <div class="novel-detail">
+      <div style="max-width:var(--max-width);margin:0 auto">
+
+        <!-- Back navigation -->
+        <a href="novels.html" class="back-link">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          All Novels
+        </a>
+
+        <!-- Detail content injected by main.js initNovelDetail() -->
+        <div id="novel-detail-content" class="novel-detail-inner" aria-live="polite">
+          <!-- Loading state -->
+          <p style="grid-column:1/-1;text-align:center;color:var(--color-muted);font-style:italic;padding:4rem">
+            Loading&hellip;
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ═══ FOOTER ═══════════════════════════════════ -->
+  <footer class="site-footer" id="site-footer" aria-label="Site footer"></footer>
+
+
+  <!-- ═══ CHAPTER READER MODAL ═════════════════════ -->
+  <div id="chapter-modal" class="chapter-modal" role="dialog" aria-modal="true" aria-labelledby="chapter-modal-title">
+    <div class="chapter-modal-inner">
+      <div class="chapter-modal-header">
+        <span class="chapter-modal-title" id="chapter-modal-title">First Chapter</span>
+        <button class="chapter-modal-close" aria-label="Close chapter reader">&times;</button>
+      </div>
+      <div class="chapter-modal-body" tabindex="0">
+        <!-- Content injected by main.js -->
+      </div>
+    </div>
+  </div>
+
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Concepts &amp; Fan Art — concept imagery, fan contributions, and artwork from the worlds of Hayden's fantasy novels.">
+  <title>Concepts / Fan Art — Purplehat Publishing</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ═══ HEADER / NAV ═════════════════════════════ -->
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+      <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hayden.html">Hayden</a></li>
+        <li><a href="novels.html">Novels</a></li>
+        <li><a href="concepts.html">Concepts/Fan Art</a></li>
+      </ul>
+      <a href="index.html" class="nav-home-icon" aria-label="Home">
+        <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
+      </a>
+    </nav>
+  </header>
+
+  <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
+    <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hayden.html">Hayden</a></li>
+      <li><a href="novels.html">Novels</a></li>
+      <li><a href="concepts.html">Concepts/Fan Art</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════ -->
+  <main>
+
+    <!-- Page hero banner -->
+    <section class="page-hero" aria-label="Concepts page header">
+      <div class="page-hero-content">
+        <h1>Concepts &amp; Fan Art</h1>
+        <p>Visions from the worlds within the pages</p>
+      </div>
+    </section>
+
+
+    <!-- Grid section -->
+    <section class="section" aria-labelledby="fanart-heading">
+      <div class="section-inner">
+        <h2 class="section-heading reveal" id="fanart-heading">The Gallery</h2>
+        <p class="section-sub reveal">Click any image to view full size</p>
+        <div class="gold-divider reveal"></div>
+
+        <!--
+          Fan art grid: items injected by main.js renderFanArt()
+          To add images:
+            1. Drop image files into assets/images/fanart/
+            2. Add entries to the FANART array in assets/js/main.js
+        -->
+        <div class="fanart-grid" role="list" aria-label="Fan art gallery">
+          <!-- Items injected by main.js -->
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Submission callout -->
+    <section class="section section-dark" aria-labelledby="submit-heading">
+      <div class="section-inner" style="max-width:640px;text-align:center">
+        <h2 class="section-heading reveal" id="submit-heading">Share Your Art</h2>
+        <div class="gold-divider reveal"></div>
+        <p class="reveal" style="color:var(--color-muted);font-style:italic;line-height:1.85;margin-bottom:2rem">
+          Have you created fan art inspired by these stories? We&rsquo;d love to see it.
+          Reach out through social media to share your creations and potentially have
+          your work featured here in the gallery.
+        </p>
+        <div class="reveal" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+          <a href="novels.html" class="btn btn-outline">Explore the Novels</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ═══ FOOTER ═══════════════════════════════════ -->
+  <footer class="site-footer" id="site-footer" aria-label="Site footer"></footer>
+
+
+  <!-- ═══ LIGHTBOX ════════════════════════════════= -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lightbox-close" aria-label="Close image viewer">&times;</button>
+    <button class="lightbox-btn lightbox-prev" aria-label="Previous image" disabled>
+      <i class="fas fa-chevron-left" aria-hidden="true"></i>
+    </button>
+    <div class="lightbox-img-wrap">
+      <img class="lightbox-img" src="" alt="">
+      <p class="lightbox-caption"></p>
+    </div>
+    <button class="lightbox-btn lightbox-next" aria-label="Next image">
+      <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    </button>
+  </div>
+
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

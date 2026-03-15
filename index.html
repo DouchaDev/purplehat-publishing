@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Purplehat Publishing — epic fantasy fiction by author Hayden. Discover new worlds, compelling characters, and adventures beyond imagination.">
+  <title>Purplehat Publishing — Home</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ═══ HEADER / NAV ═════════════════════════════ -->
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+      <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hayden.html">Hayden</a></li>
+        <li><a href="novels.html">Novels</a></li>
+        <li><a href="concepts.html">Concepts/Fan Art</a></li>
+      </ul>
+      <a href="index.html" class="nav-home-icon" aria-label="Home">
+        <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
+      </a>
+    </nav>
+  </header>
+
+  <!-- Mobile nav overlay -->
+  <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
+    <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hayden.html">Hayden</a></li>
+      <li><a href="novels.html">Novels</a></li>
+      <li><a href="concepts.html">Concepts/Fan Art</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════ -->
+  <main>
+
+    <!-- Hero -->
+    <section class="hero" aria-label="Welcome">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Purplehat Publishing</p>
+        <h1>Hayden</h1>
+        <p class="hero-tagline">Epic fantasy for the brave of heart</p>
+        <div class="hero-cta">
+          <a href="novels.html" class="btn btn-primary">Explore the Novels</a>
+          <a href="hayden.html" class="btn btn-outline">About the Author</a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Featured Novels -->
+    <section class="section" aria-labelledby="featured-heading">
+      <div class="section-inner">
+        <h2 class="section-heading reveal" id="featured-heading">The Novels</h2>
+        <p class="section-sub reveal">Worlds forged in darkness and light</p>
+        <div class="gold-divider reveal"></div>
+        <!-- Populated by main.js renderFeaturedNovels() -->
+        <div class="featured-novels" id="featured-novels"></div>
+      </div>
+    </section>
+
+
+    <!-- Pull quote -->
+    <section class="pull-quote" aria-label="Author quote">
+      <blockquote class="reveal">
+        &ldquo;Every world begins with a single word.&rdquo;
+        <cite>— Hayden</cite>
+      </blockquote>
+    </section>
+
+
+    <!-- About the author teaser -->
+    <section class="section section-dark" aria-labelledby="about-teaser-heading">
+      <div class="section-inner" style="max-width:720px;text-align:center">
+        <h2 class="section-heading reveal" id="about-teaser-heading">About Hayden</h2>
+        <div class="gold-divider reveal"></div>
+        <p class="reveal" style="font-size:1.05rem;line-height:1.85;color:var(--color-muted)">
+          A storyteller drawn to the mythic, the mysterious, and the human heart at the centre of every great adventure.
+          Hayden crafts fantasy worlds where ancient powers stir, heroes are forged by fire, and every choice echoes across generations.
+        </p>
+        <div class="reveal" style="margin-top:2rem">
+          <a href="hayden.html" class="btn btn-outline">Read the Full Bio</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ═══ FOOTER ═══════════════════════════════════ -->
+  <footer class="site-footer" id="site-footer" aria-label="Site footer">
+    <!-- Populated by main.js renderFooter() -->
+  </footer>
+
+
+  <!-- ═══ CHAPTER READER MODAL ═════════════════════ -->
+  <div id="chapter-modal" class="chapter-modal" role="dialog" aria-modal="true" aria-labelledby="chapter-modal-title">
+    <div class="chapter-modal-inner">
+      <div class="chapter-modal-header">
+        <span class="chapter-modal-title" id="chapter-modal-title">First Chapter</span>
+        <button class="chapter-modal-close" aria-label="Close chapter reader">&times;</button>
+      </div>
+      <div class="chapter-modal-body" tabindex="0">
+        <!-- Content injected by main.js -->
+      </div>
+    </div>
+  </div>
+
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

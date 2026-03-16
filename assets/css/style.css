@@ -17,7 +17,7 @@
    13.  Chapter Reader Modal
    14.  Footer
    15.  Animations & Keyframes
-   16.  Responsive Breakpoints (mobile-first)
+   16.  Responsive Breakpoints
    17.  Reduced Motion
    ================================================ */
 
@@ -25,38 +25,26 @@
 /* ─── 1. DESIGN TOKENS ─────────────────────────────── */
 
 :root {
-  /* Colours — drawn from Raphael's Saint George & The Dark Crystal */
-  --color-bg:          #161009;   /* warm dark brown — dark enough to feel rich, light enough to show grain */
-  --color-bg-surface:  #201409;   /* card/section surface */
-  --color-bg-elevated: #2A1A0A;   /* elevated elements */
-  --color-gold:        #C9A96E;   /* primary accent — Raphael gold */
-  --color-gold-light:  #E5C98A;   /* hover gold */
-  --color-plum:        #3D2B5E;   /* Dark Crystal purple */
-  --color-plum-light:  #5A4080;   /* lighter purple */
-  --color-teal:        #4A8B7F;   /* crystalline teal */
-  --color-text:        #F0EBE1;   /* cream — softer than pure white */
-  --color-muted:       #9A8E80;   /* secondary / muted text */
-  --color-red:         #A83020;   /* Raphael deep red — sparingly */
-  --color-border:      rgba(201, 169, 110, 0.2);
+  /* Ink & woodcut palette — high contrast, amber accent */
+  --color-bg:          #0D0D0D;   /* near-black ink */
+  --color-bg-surface:  #141414;   /* card / section surface */
+  --color-bg-elevated: #1C1C1C;   /* elevated elements */
+  --color-gold:        #C8922A;   /* amber ochre — like the WILD cover title */
+  --color-gold-light:  #DFA030;   /* brighter amber on hover */
+  --color-text:        #EDE8DF;   /* warm off-white — ink on paper */
+  --color-muted:       #7A7268;   /* secondary text */
+  --color-border:      rgba(200, 146, 42, 0.28);
 
   /* Typography */
-  --font-heading: 'Cinzel', Georgia, serif;
-  --font-body:    'Lora', Georgia, serif;
+  --font-heading: 'Pirata One', serif;          /* bold, rough, medieval display */
+  --font-label:   'Cinzel', Georgia, serif;     /* nav, tags, small-caps UI */
+  --font-body:    'Lora', Georgia, serif;       /* body text */
 
   /* Layout */
   --nav-height:  72px;
   --max-width:   1200px;
-  --radius:      4px;
-  --transition:  0.3s ease;
-
-  /* Weave Params */
-  --weavescale-transparent: 4px;   /* horizontal spacing of weave lines */
-  --weavescale-xs: 128px;   /* horizontal spacing of weave lines */
-  --weavescale-sm: 192px;   /* horizontal spacing of weave lines */
-  --weavescale-md: 128px;  /* horizontal spacing of weave lines */
-  --weavescale-lg: 192px;  /* horizontal spacing of weave lines */
-  --weave-degrees-1: 135deg;  /* angle of first weave layer */
-  --weave-degrees-2: 45deg;   /* angle of second weave layer */
+  --radius:      2px;   /* sharp corners — ink print aesthetic */
+  --transition:  0.25s ease;
 }
 
 
@@ -82,31 +70,26 @@ body {
   display: flex;
   flex-direction: column;
   /*
-    Parchment grain — three layers stacked:
-    1. Warm amber-tinted SVG turbulence noise (feColorMatrix shifts R/G/B so
-       the grain reads as warm gold rather than invisible grey on dark brown)
-    2. 135° repeating diagonal — one direction of the linen crosshatch
-    3.  45° repeating diagonal — other direction, together forming a canvas weave
+    Woodcut crosshatch texture — two sets of parallel hatching lines at
+    crossing angles, fixed to viewport so the pattern is one continuous
+    sheet across all sections. Mimics the ink marks of a lino/woodcut print.
   */
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
     repeating-linear-gradient(
-      var(--weave-degrees-1),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(180, 118, 38, 0.030) var(--weavescale-xs),
-      rgba(180, 118, 38, 0.030) var(--weavescale-sm)
+      72deg,
+      transparent 0,
+      transparent 5px,
+      rgba(255,255,255,0.038) 5px,
+      rgba(255,255,255,0.038) 6px
     ),
     repeating-linear-gradient(
-      var(--weave-degrees-2),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(180, 118, 38, 0.024) var(--weavescale-xs),
-      rgba(180, 118, 38, 0.024) var(--weavescale-sm)
+      -18deg,
+      transparent 0,
+      transparent 9px,
+      rgba(255,255,255,0.022) 9px,
+      rgba(255,255,255,0.022) 10px
     );
-  /* noise scrolls with content; weave layers are fixed to viewport so the
-     pattern is one continuous sheet — no restart at section boundaries */
-  background-attachment: scroll, fixed, fixed;
+  background-attachment: fixed;
 }
 
 main {
@@ -142,15 +125,15 @@ button {
 
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
-  font-weight: 400;
-  letter-spacing: 0.07em;
+  font-weight: 400;   /* Pirata One is a single-weight display face */
+  letter-spacing: 0.04em;
   color: var(--color-gold);
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
-h1 { font-size: clamp(2rem,   5vw,  3.5rem); }
-h2 { font-size: clamp(1.5rem, 3.5vw, 2.2rem); }
-h3 { font-size: clamp(1rem,   2.5vw, 1.4rem); }
+h1 { font-size: clamp(2.6rem,  6vw, 4.8rem); }
+h2 { font-size: clamp(1.9rem,  4vw, 3rem);   }
+h3 { font-size: clamp(1.15rem, 2.5vw, 1.7rem); }
 
 p {
   margin-bottom: 1.1rem;
@@ -172,15 +155,16 @@ p:last-child {
 .section-sub {
   text-align: center;
   color: var(--color-muted);
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   margin-bottom: 2.5rem;
 }
 
 .gold-divider {
   width: 80px;
-  height: 1px;
+  height: 2px;
   background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
   margin: 1rem auto 2.5rem;
 }
@@ -207,13 +191,9 @@ p:last-child {
   right: 0;
   z-index: 100;
   height: var(--nav-height);
-  background: linear-gradient(
-    to bottom,
-    rgba(18, 14, 10, 0.97) 0%,
-    rgba(18, 14, 10, 0.88) 100%
-  );
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-border);
+  background: rgba(8, 8, 8, 0.97);
+  backdrop-filter: blur(6px);
+  border-bottom: 2px solid var(--color-gold);
 }
 
 .site-nav {
@@ -227,7 +207,6 @@ p:last-child {
   padding: 0 1.5rem;
 }
 
-/* Centred nav links */
 .nav-links {
   display: flex;
   gap: 2.5rem;
@@ -235,7 +214,7 @@ p:last-child {
 }
 
 .nav-links a {
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.72rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -251,7 +230,7 @@ p:last-child {
   bottom: 0;
   left: 0;
   width: 0;
-  height: 1px;
+  height: 2px;
   background: var(--color-gold);
   transition: width var(--transition);
 }
@@ -283,11 +262,6 @@ p:last-child {
   transform: translateY(-50%) scale(1.12);
 }
 
-.nav-home-icon svg {
-  width: 34px;
-  height: 36px;
-}
-
 /* Hamburger button — hidden on desktop, top right on mobile */
 .nav-toggle {
   display: none;
@@ -312,12 +286,12 @@ p:last-child {
   transition: all var(--transition);
 }
 
-/* Mobile nav overlay — z-index above header (100) */
+/* Mobile nav overlay — z-index above header */
 .nav-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(12, 9, 6, 0.97);
+  background: rgba(8, 8, 8, 0.98);
   z-index: 150;
   flex-direction: column;
   align-items: center;
@@ -330,7 +304,7 @@ p:last-child {
 }
 
 .nav-overlay .nav-links {
-  display: flex;          /* override the mobile display:none on .nav-links */
+  display: flex;
   flex-direction: column;
   gap: 2rem;
   text-align: center;
@@ -371,48 +345,32 @@ p:last-child {
   position: relative;
   overflow: hidden;
   padding: calc(var(--nav-height) + 3rem) 1.5rem 5rem;
-  background:
-    /* Purple-tinted weave — sits on top of gradients, matches the plum atmosphere */
+  background-color: #080808;
+  /* Denser hatching for the dramatic full-screen hero */
+  background-image:
     repeating-linear-gradient(
-      var(--weave-degrees-1),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(80, 55, 140, 0.045) var(--weavescale-md),
-      rgba(80, 55, 140, 0.045) var(--weavescale-lg)
+      72deg,
+      transparent 0,
+      transparent 4px,
+      rgba(255,255,255,0.052) 4px,
+      rgba(255,255,255,0.052) 5px
     ),
     repeating-linear-gradient(
-      var(--weave-degrees-2),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(80, 55, 140, 0.036) var(--weavescale-md),
-      rgba(80, 55, 140, 0.036) var(--weavescale-lg)
-    ),
-    /* Atmosphere gradients */
-    radial-gradient(ellipse at 15% 60%, rgba(61,  43, 94,  0.45) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 25%, rgba(74, 139,127,  0.22) 0%, transparent 48%),
-    radial-gradient(ellipse at 50% 85%, rgba(168, 48, 32,  0.18) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 10%, rgba(201,169,110,  0.08) 0%, transparent 60%),
-    linear-gradient(170deg, #0E0B07 0%, #1C1008 45%, #0A0806 100%);
-  /* weave (layers 1–2) fixed to viewport; atmosphere gradients scroll with element */
-  background-attachment: fixed, fixed, scroll, scroll, scroll, scroll, scroll;
-}
-
-/* Warm amber noise layer over hero — fixed so it aligns with body noise */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.6 0 0 0 0.04 0.35 0 0 0 0.02 0.5 0 0 0 0.06 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      -18deg,
+      transparent 0,
+      transparent 8px,
+      rgba(255,255,255,0.032) 8px,
+      rgba(255,255,255,0.032) 9px
+    );
   background-attachment: fixed;
-  pointer-events: none;
 }
 
-/* Subtle vignette */
+/* Vignette — draws the eye to the centre text */
 .hero::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 40%, rgba(10,8,5,0.65) 100%);
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.72) 100%);
   pointer-events: none;
 }
 
@@ -423,11 +381,11 @@ p:last-child {
 }
 
 .hero-eyebrow {
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.7rem;
   letter-spacing: 0.45em;
   text-transform: uppercase;
-  color: var(--color-teal);
+  color: var(--color-gold);
   margin-bottom: 1.5rem;
   opacity: 0;
   animation: fadeUp 0.9s ease 0.3s forwards;
@@ -437,7 +395,7 @@ p:last-child {
   margin-bottom: 1.5rem;
   opacity: 0;
   animation: fadeUp 0.9s ease 0.65s forwards;
-  text-shadow: 0 2px 40px rgba(201,169,110,0.18);
+  text-shadow: 0 2px 40px rgba(200,146,42,0.22);
 }
 
 .hero-tagline {
@@ -464,7 +422,7 @@ p:last-child {
 .btn {
   display: inline-block;
   padding: 0.7rem 2rem;
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.68rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -477,27 +435,26 @@ p:last-child {
 
 .btn-primary {
   background: var(--color-gold);
-  color: #120E0A;
+  color: #080808;
 }
 
 .btn-primary:hover {
   background: var(--color-gold-light);
-  color: #120E0A;
+  color: #080808;
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(201,169,110,0.28);
+  box-shadow: 0 8px 28px rgba(200,146,42,0.35);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--color-gold);
-  border: 1px solid var(--color-gold);
+  border: 2px solid var(--color-gold);
 }
 
 .btn-outline:hover {
-  background: rgba(201,169,110,0.1);
+  background: rgba(200,146,42,0.1);
   color: var(--color-gold-light);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(201,169,110,0.15);
 }
 
 
@@ -508,8 +465,7 @@ p:last-child {
   position: relative;
 }
 
-/* ─── Option D gold divider — fades in from both edges, glows gently ─── */
-/* Sits at the top of the first content section below any purple hero/banner */
+/* ─── Gold ink divider between purple hero/banners and content ── */
 .hero + .section::before,
 .page-hero + .section::before,
 .page-hero + .author-section::before {
@@ -518,19 +474,17 @@ p:last-child {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 4px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(201, 169, 110, 0.25) 12%,
-    var(--color-gold) 38%,
-    var(--color-gold) 62%,
-    rgba(201, 169, 110, 0.25) 88%,
+    rgba(200, 146, 42, 0.3) 10%,
+    var(--color-gold) 35%,
+    var(--color-gold) 65%,
+    rgba(200, 146, 42, 0.3) 90%,
     transparent 100%
   );
-  box-shadow:
-    0 1px 18px rgba(201, 169, 110, 0.22),
-    0 0   8px rgba(201, 169, 110, 0.14);
+  box-shadow: 0 1px 24px rgba(200,146,42,0.28);
   pointer-events: none;
 }
 
@@ -540,27 +494,15 @@ p:last-child {
 }
 
 .section-dark {
-  /* Slightly stronger warm grain on mid-tone surfaces */
   background-color: var(--color-bg-surface);
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.19 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.034) var(--weavescale-xs), rgba(180,118,38,0.034) var(--weavescale-sm)),
-    repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.028) var(--weavescale-xs), rgba(180,118,38,0.028) var(--weavescale-sm));
-  background-attachment: scroll, fixed, fixed;
 }
 
-/* Pull-quote — most prominent parchment moment on the page */
+/* Pull-quote — set apart with bold double gold borders */
 .pull-quote {
   padding: 4.5rem 2rem;
-  /* Warmer, lighter surface + strongest grain — this is the "Dark Crystal parchment" strip */
-  background-color: #2C1A09;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.07 0.4 0 0 0 0.04 0.15 0 0 0 0.01 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.040) var(--weavescale-xs), rgba(180,118,38,0.040) var(--weavescale-sm)),
-    repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.032) var(--weavescale-xs), rgba(180,118,38,0.032) var(--weavescale-sm));
-  background-attachment: scroll, fixed, fixed;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
+  background-color: #0A0A0A;
+  border-top: 2px solid var(--color-gold);
+  border-bottom: 2px solid var(--color-gold);
   text-align: center;
 }
 
@@ -568,17 +510,17 @@ p:last-child {
   max-width: 680px;
   margin: 0 auto;
   font-family: var(--font-heading);
-  font-size: clamp(1.05rem, 2.5vw, 1.45rem);
+  font-size: clamp(1.3rem, 3vw, 2rem);
   font-style: italic;
   color: var(--color-gold);
   letter-spacing: 0.03em;
-  line-height: 1.65;
+  line-height: 1.5;
 }
 
 .pull-quote cite {
   display: block;
   margin-top: 1.2rem;
-  font-family: var(--font-body);
+  font-family: var(--font-label);
   font-size: 0.78rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -592,28 +534,23 @@ p:last-child {
   display: flex;
   align-items: flex-end;
   padding: calc(var(--nav-height) + 3rem) 1.5rem 3rem;
-  background:
-    /* Purple weave — fixed to viewport, continuous with hero weave */
+  background-color: #080808;
+  background-image:
     repeating-linear-gradient(
-      var(--weave-degrees-1),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(80, 55, 140, 0.045) var(--weavescale-md),
-      rgba(80, 55, 140, 0.045) var(--weavescale-lg)
+      72deg,
+      transparent 0,
+      transparent 4px,
+      rgba(255,255,255,0.052) 4px,
+      rgba(255,255,255,0.052) 5px
     ),
     repeating-linear-gradient(
-      var(--weave-degrees-2),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(80, 55, 140, 0.036) var(--weavescale-md),
-      rgba(80, 55, 140, 0.036) var(--weavescale-lg)
-    ),
-    /* Atmosphere */
-    radial-gradient(ellipse at 20% 80%, rgba(61, 43, 94, 0.4) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 20%, rgba(74,139,127, 0.2) 0%, transparent 50%),
-    linear-gradient(170deg, #0E0B07 0%, #1A1008 100%);
-  /* weave fixed; atmosphere scrolls with element */
-  background-attachment: fixed, fixed, scroll, scroll, scroll;
+      -18deg,
+      transparent 0,
+      transparent 8px,
+      rgba(255,255,255,0.032) 8px,
+      rgba(255,255,255,0.032) 9px
+    );
+  background-attachment: fixed;
   position: relative;
   overflow: hidden;
 }
@@ -622,7 +559,7 @@ p:last-child {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, transparent 30%, rgba(10,8,5,0.5) 100%);
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%);
   pointer-events: none;
 }
 
@@ -663,19 +600,19 @@ p:last-child {
 }
 
 .featured-novel-card .cover-wrap {
-  display: block;   /* <a> is inline by default — must be block for aspect-ratio to work */
+  display: block;   /* <a> is inline by default — must be block for aspect-ratio */
   width: 100%;
   max-width: 260px;
   aspect-ratio: 2 / 3;
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.65);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.7);
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .featured-novel-card .cover-wrap:hover {
   transform: scale(1.025) translateY(-4px);
-  box-shadow: 0 28px 64px rgba(201,169,110,0.14);
+  box-shadow: 0 28px 64px rgba(200,146,42,0.18);
 }
 
 .featured-novel-card .cover-wrap img {
@@ -729,14 +666,14 @@ p:last-child {
 }
 
 .novel-card:hover {
-  border-color: rgba(201,169,110,0.45);
+  border-color: rgba(200,146,42,0.55);
 }
 
 .novel-card-cover {
   position: relative;
   overflow: hidden;
   aspect-ratio: 2 / 3;
-  background: linear-gradient(145deg, #2A1F30 0%, #1A1A2E 55%, #0E1A1C 100%);
+  background: linear-gradient(145deg, #1A1A1A 0%, #111111 100%);
 }
 
 .novel-card-cover img {
@@ -758,8 +695,8 @@ p:last-child {
   .novel-card:hover {
     transform: perspective(900px) rotateY(7deg) rotateX(-2deg) scale(1.045);
     box-shadow:
-      -14px 20px 50px rgba(0,0,0,0.65),
-      0 0 0 1px rgba(201,169,110,0.28);
+      -14px 20px 50px rgba(0,0,0,0.75),
+      0 0 0 1px rgba(200,146,42,0.32);
   }
 
   .novel-card:hover .novel-card-cover img {
@@ -774,7 +711,7 @@ p:last-child {
     background: linear-gradient(
       108deg,
       transparent 25%,
-      rgba(201,169,110,0.22) 50%,
+      rgba(200,146,42,0.25) 50%,
       transparent 75%
     );
     transform: translateX(-150%);
@@ -792,8 +729,8 @@ p:last-child {
 }
 
 .novel-card-info h3 {
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
   margin-bottom: 0.4rem;
 }
 
@@ -804,11 +741,11 @@ p:last-child {
   line-height: 1.45;
 }
 
-/* Cover placeholder — dark gradient background visible in all contexts */
+/* Cover placeholder */
 .cover-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(145deg, #2A1F30 0%, #1A1A2E 55%, #0E1A1C 100%);
+  background: linear-gradient(145deg, #1A1A1A 0%, #111111 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -816,16 +753,17 @@ p:last-child {
   gap: 0.6rem;
   padding: 1rem;
   text-align: center;
+  border: 1px solid var(--color-border);
 }
 
 .cover-placeholder-icon {
   font-size: 2.5rem;
-  opacity: 0.25;
+  opacity: 0.2;
   line-height: 1;
 }
 
 .cover-placeholder-title {
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.8rem;
   letter-spacing: 0.12em;
   color: var(--color-gold);
@@ -833,7 +771,7 @@ p:last-child {
 }
 
 .cover-placeholder-label {
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -847,7 +785,7 @@ p:last-child {
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  background: rgba(18,14,10,0.88);
+  background: rgba(8,8,8,0.9);
   border: 1px solid var(--color-border);
   color: var(--color-gold);
   width: 42px;
@@ -903,12 +841,12 @@ p:last-child {
   max-width: 380px;
   margin: 0 auto;
   border-radius: var(--radius);
-  box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.8);
   aspect-ratio: 2 / 3;
 }
 
 .novel-detail-cover .cover-placeholder {
-  background: linear-gradient(145deg, #2A1F30, #1A1A2E);
+  background: linear-gradient(145deg, #1A1A1A, #111111);
   border: 1px solid var(--color-border);
 }
 
@@ -920,13 +858,13 @@ p:last-child {
 }
 
 .genre-tag {
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   padding: 0.25rem 0.8rem;
-  border: 1px solid var(--color-teal);
-  color: var(--color-teal);
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
   border-radius: 2px;
 }
 
@@ -941,7 +879,7 @@ p:last-child {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.65rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -986,7 +924,7 @@ p:last-child {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(18,14,10,0.5);
+  background: rgba(8,8,8,0.55);
   opacity: 0;
   transition: opacity var(--transition);
   z-index: 1;
@@ -1022,7 +960,7 @@ p:last-child {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0,0,0,0.93);
+  background: rgba(0,0,0,0.95);
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
@@ -1045,7 +983,7 @@ p:last-child {
   max-height: 82vh;
   object-fit: contain;
   border-radius: var(--radius);
-  box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.9);
 }
 
 .lightbox-close {
@@ -1071,7 +1009,7 @@ p:last-child {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(18,14,10,0.75);
+  background: rgba(8,8,8,0.8);
   border: 1px solid var(--color-border);
   color: var(--color-gold);
   width: 44px;
@@ -1115,7 +1053,7 @@ p:last-child {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0,0,0,0.92);
+  background: rgba(0,0,0,0.94);
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
@@ -1135,7 +1073,7 @@ p:last-child {
   display: flex;
   flex-direction: column;
   animation: slideUp 0.4s ease;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.85);
 }
 
 .chapter-modal-header {
@@ -1149,7 +1087,7 @@ p:last-child {
 }
 
 .chapter-modal-title {
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.75rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -1176,32 +1114,26 @@ p:last-child {
   overflow-y: auto;
   flex: 1;
   scrollbar-width: thin;
-  scrollbar-color: var(--color-plum) transparent;
+  scrollbar-color: var(--color-gold) transparent;
 }
 
-.chapter-modal-body::-webkit-scrollbar {
-  width: 5px;
-}
-
-.chapter-modal-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+.chapter-modal-body::-webkit-scrollbar { width: 5px; }
+.chapter-modal-body::-webkit-scrollbar-track { background: transparent; }
 .chapter-modal-body::-webkit-scrollbar-thumb {
-  background: var(--color-plum);
-  border-radius: 3px;
+  background: var(--color-gold);
+  border-radius: 2px;
 }
 
 .chapter-book-title {
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.5rem;
   text-align: center;
   margin-bottom: 0.5rem;
   color: var(--color-gold);
 }
 
 .chapter-heading {
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.8rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -1233,7 +1165,7 @@ p:last-child {
 
 .site-footer {
   background: var(--color-bg-surface);
-  border-top: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-gold);
   padding: 3rem 1.5rem 2.5rem;
   text-align: center;
 }
@@ -1245,7 +1177,7 @@ p:last-child {
 
 .footer-divider {
   width: 100%;
-  height: 1px;
+  height: 2px;
   background: linear-gradient(90deg, transparent, var(--color-border), transparent);
   margin-bottom: 2.5rem;
 }
@@ -1264,7 +1196,7 @@ p:last-child {
   align-items: center;
   gap: 0.5rem;
   color: var(--color-muted);
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 0.58rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -1288,6 +1220,7 @@ p:last-child {
 .footer-copy {
   font-size: 0.72rem;
   color: var(--color-muted);
+  font-family: var(--font-label);
   letter-spacing: 0.1em;
   opacity: 0.7;
 }
@@ -1306,34 +1239,20 @@ p:last-child {
 }
 
 
-/* ─── 16. RESPONSIVE BREAKPOINTS (mobile-first) ────── */
+/* ─── 16. RESPONSIVE BREAKPOINTS ───────────────────── */
 
-/* Tablet: 600px+ */
 @media (min-width: 600px) {
-  .fanart-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .fanart-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Desktop: 1024px+ */
 @media (min-width: 1024px) {
-  .fanart-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .fanart-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Mobile: max 767px */
 @media (max-width: 767px) {
-  /* Nav */
-  .nav-links {
-    display: none;
-  }
+  .nav-links  { display: none; }
+  .nav-toggle { display: flex; }
 
-  .nav-toggle {
-    display: flex;
-  }
-
-  /* Carousel: one card visible */
   .novel-card {
     flex: 0 0 82vw;
     min-width: 0;
@@ -1342,33 +1261,19 @@ p:last-child {
   .carousel-btn-prev { left: 0; }
   .carousel-btn-next { right: 0; }
 
-  /* Novel detail: stack vertically */
   .novel-detail-inner {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
 
-  .novel-detail-cover {
-    position: static;
-  }
+  .novel-detail-cover { position: static; }
 
-  /* Hero: tighter padding */
-  .hero {
-    padding-bottom: 4rem;
-  }
+  .hero { padding-bottom: 4rem; }
 }
 
-
-/* iOS Safari / touch-device fallback — background-attachment:fixed is broken
-   on most mobile browsers (renders as scroll or causes repaint jank).
-   On touch devices the weave restarts per-section, which is acceptable. */
+/* Touch-device fallback — background-attachment:fixed causes jank on iOS */
 @media (hover: none) and (pointer: coarse) {
-  body,
-  .section-dark,
-  .pull-quote,
-  .hero,
-  .hero::before,
-  .page-hero {
+  body, .hero, .page-hero {
     background-attachment: scroll;
   }
 }
@@ -1382,10 +1287,7 @@ p:last-child {
     transition-duration: 0.01ms !important;
   }
 
-  .hero-eyebrow,
-  .hero h1,
-  .hero-tagline,
-  .hero-cta {
+  .hero-eyebrow, .hero h1, .hero-tagline, .hero-cta {
     opacity: 1;
     animation: none;
   }

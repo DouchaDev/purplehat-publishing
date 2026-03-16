@@ -26,9 +26,9 @@
 
 :root {
   /* Colours — drawn from Raphael's Saint George & The Dark Crystal */
-  --color-bg:          #120E0A;   /* near-black warm brown */
-  --color-bg-surface:  #1C1510;   /* card/section surface */
-  --color-bg-elevated: #281D14;   /* elevated elements */
+  --color-bg:          #161009;   /* warm dark brown — dark enough to feel rich, light enough to show grain */
+  --color-bg-surface:  #201409;   /* card/section surface */
+  --color-bg-elevated: #2A1A0A;   /* elevated elements */
   --color-gold:        #C9A96E;   /* primary accent — Raphael gold */
   --color-gold-light:  #E5C98A;   /* hover gold */
   --color-plum:        #3D2B5E;   /* Dark Crystal purple */
@@ -48,6 +48,15 @@
   --max-width:   1200px;
   --radius:      4px;
   --transition:  0.3s ease;
+
+  /* Weave Params */
+  --weavescale-transparent: 4px;   /* horizontal spacing of weave lines */
+  --weavescale-xs: 128px;   /* horizontal spacing of weave lines */
+  --weavescale-sm: 192px;   /* horizontal spacing of weave lines */
+  --weavescale-md: 128px;  /* horizontal spacing of weave lines */
+  --weavescale-lg: 192px;  /* horizontal spacing of weave lines */
+  --weave-degrees-1: 135deg;  /* angle of first weave layer */
+  --weave-degrees-2: 45deg;   /* angle of second weave layer */
 }
 
 
@@ -72,8 +81,32 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* Subtle parchment-grain texture */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  /*
+    Parchment grain — three layers stacked:
+    1. Warm amber-tinted SVG turbulence noise (feColorMatrix shifts R/G/B so
+       the grain reads as warm gold rather than invisible grey on dark brown)
+    2. 135° repeating diagonal — one direction of the linen crosshatch
+    3.  45° repeating diagonal — other direction, together forming a canvas weave
+  */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(
+      var(--weave-degrees-1),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(180, 118, 38, 0.030) var(--weavescale-xs),
+      rgba(180, 118, 38, 0.030) var(--weavescale-sm)
+    ),
+    repeating-linear-gradient(
+      var(--weave-degrees-2),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(180, 118, 38, 0.024) var(--weavescale-xs),
+      rgba(180, 118, 38, 0.024) var(--weavescale-sm)
+    );
+  /* noise scrolls with content; weave layers are fixed to viewport so the
+     pattern is one continuous sheet — no restart at section boundaries */
+  background-attachment: scroll, fixed, fixed;
 }
 
 main {
@@ -339,19 +372,38 @@ p:last-child {
   overflow: hidden;
   padding: calc(var(--nav-height) + 3rem) 1.5rem 5rem;
   background:
+    /* Purple-tinted weave — sits on top of gradients, matches the plum atmosphere */
+    repeating-linear-gradient(
+      var(--weave-degrees-1),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(80, 55, 140, 0.045) var(--weavescale-md),
+      rgba(80, 55, 140, 0.045) var(--weavescale-lg)
+    ),
+    repeating-linear-gradient(
+      var(--weave-degrees-2),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(80, 55, 140, 0.036) var(--weavescale-md),
+      rgba(80, 55, 140, 0.036) var(--weavescale-lg)
+    ),
+    /* Atmosphere gradients */
     radial-gradient(ellipse at 15% 60%, rgba(61,  43, 94,  0.45) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 25%, rgba(74, 139,127,  0.22) 0%, transparent 48%),
     radial-gradient(ellipse at 50% 85%, rgba(168, 48, 32,  0.18) 0%, transparent 45%),
     radial-gradient(ellipse at 50% 10%, rgba(201,169,110,  0.08) 0%, transparent 60%),
     linear-gradient(170deg, #0E0B07 0%, #1C1008 45%, #0A0806 100%);
+  /* weave (layers 1–2) fixed to viewport; atmosphere gradients scroll with element */
+  background-attachment: fixed, fixed, scroll, scroll, scroll, scroll, scroll;
 }
 
-/* Parchment noise layer over hero */
+/* Warm amber noise layer over hero — fixed so it aligns with body noise */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.6 0 0 0 0.04 0.35 0 0 0 0.02 0.5 0 0 0 0.06 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-attachment: fixed;
   pointer-events: none;
 }
 
@@ -453,6 +505,33 @@ p:last-child {
 
 .section {
   padding: 5rem 1.5rem;
+  position: relative;
+}
+
+/* ─── Option D gold divider — fades in from both edges, glows gently ─── */
+/* Sits at the top of the first content section below any purple hero/banner */
+.hero + .section::before,
+.page-hero + .section::before,
+.page-hero + .author-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 169, 110, 0.25) 12%,
+    var(--color-gold) 38%,
+    var(--color-gold) 62%,
+    rgba(201, 169, 110, 0.25) 88%,
+    transparent 100%
+  );
+  box-shadow:
+    0 1px 18px rgba(201, 169, 110, 0.22),
+    0 0   8px rgba(201, 169, 110, 0.14);
+  pointer-events: none;
 }
 
 .section-inner {
@@ -461,13 +540,25 @@ p:last-child {
 }
 
 .section-dark {
+  /* Slightly stronger warm grain on mid-tone surfaces */
   background-color: var(--color-bg-surface);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.19 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.034) var(--weavescale-xs), rgba(180,118,38,0.034) var(--weavescale-sm)),
+    repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.028) var(--weavescale-xs), rgba(180,118,38,0.028) var(--weavescale-sm));
+  background-attachment: scroll, fixed, fixed;
 }
 
-/* Pull-quote */
+/* Pull-quote — most prominent parchment moment on the page */
 .pull-quote {
   padding: 4.5rem 2rem;
-  background: var(--color-bg-surface);
+  /* Warmer, lighter surface + strongest grain — this is the "Dark Crystal parchment" strip */
+  background-color: #2C1A09;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.07 0.4 0 0 0 0.04 0.15 0 0 0 0.01 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.040) var(--weavescale-xs), rgba(180,118,38,0.040) var(--weavescale-sm)),
+    repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.032) var(--weavescale-xs), rgba(180,118,38,0.032) var(--weavescale-sm));
+  background-attachment: scroll, fixed, fixed;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   text-align: center;
@@ -502,10 +593,27 @@ p:last-child {
   align-items: flex-end;
   padding: calc(var(--nav-height) + 3rem) 1.5rem 3rem;
   background:
+    /* Purple weave — fixed to viewport, continuous with hero weave */
+    repeating-linear-gradient(
+      var(--weave-degrees-1),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(80, 55, 140, 0.045) var(--weavescale-md),
+      rgba(80, 55, 140, 0.045) var(--weavescale-lg)
+    ),
+    repeating-linear-gradient(
+      var(--weave-degrees-2),
+      transparent,
+      transparent var(--weavescale-transparent),
+      rgba(80, 55, 140, 0.036) var(--weavescale-md),
+      rgba(80, 55, 140, 0.036) var(--weavescale-lg)
+    ),
+    /* Atmosphere */
     radial-gradient(ellipse at 20% 80%, rgba(61, 43, 94, 0.4) 0%, transparent 55%),
     radial-gradient(ellipse at 80% 20%, rgba(74,139,127, 0.2) 0%, transparent 50%),
     linear-gradient(170deg, #0E0B07 0%, #1A1008 100%);
-  border-bottom: 1px solid var(--color-border);
+  /* weave fixed; atmosphere scrolls with element */
+  background-attachment: fixed, fixed, scroll, scroll, scroll;
   position: relative;
   overflow: hidden;
 }
@@ -555,6 +663,7 @@ p:last-child {
 }
 
 .featured-novel-card .cover-wrap {
+  display: block;   /* <a> is inline by default — must be block for aspect-ratio to work */
   width: 100%;
   max-width: 260px;
   aspect-ratio: 2 / 3;
@@ -695,10 +804,11 @@ p:last-child {
   line-height: 1.45;
 }
 
-/* Cover placeholder */
+/* Cover placeholder — dark gradient background visible in all contexts */
 .cover-placeholder {
   width: 100%;
   height: 100%;
+  background: linear-gradient(145deg, #2A1F30 0%, #1A1A2E 55%, #0E1A1C 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1245,6 +1355,21 @@ p:last-child {
   /* Hero: tighter padding */
   .hero {
     padding-bottom: 4rem;
+  }
+}
+
+
+/* iOS Safari / touch-device fallback — background-attachment:fixed is broken
+   on most mobile browsers (renders as scroll or causes repaint jank).
+   On touch devices the weave restarts per-section, which is acceptable. */
+@media (hover: none) and (pointer: coarse) {
+  body,
+  .section-dark,
+  .pull-quote,
+  .hero,
+  .hero::before,
+  .page-hero {
+    background-attachment: scroll;
   }
 }
 

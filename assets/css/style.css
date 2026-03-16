@@ -49,6 +49,21 @@
   --radius:      4px;
   --transition:  0.3s ease;
 
+  /* Spacing — change here to adjust rhythm site-wide */
+  --pad-h:           1.5rem;   /* horizontal page / component padding */
+  --section-pad-v:   5rem;     /* vertical section padding */
+  --divider-width:   80px;     /* gold ornament divider bar width */
+
+  /* Component sizing */
+  --carousel-btn-size: 42px;   /* carousel arrow button diameter */
+  --modal-max-w:       740px;  /* chapter reader modal max-width */
+
+  /* Cover placeholder — dark gradient shown when no cover image is set */
+  --cover-placeholder-bg: linear-gradient(145deg, #2A1F30 0%, #1A1A2E 55%, #0E1A1C 100%);
+
+  /* Animation */
+  --reveal-distance: 24px;     /* scroll-reveal translateY offset */
+
   /* Weave Params */
   --weavescale-transparent: 4px;   /* horizontal spacing of weave lines */
   --weavescale-xs: 128px;   /* horizontal spacing of weave lines */
@@ -179,7 +194,7 @@ p:last-child {
 }
 
 .gold-divider {
-  width: 80px;
+  width: var(--divider-width);
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
   margin: 1rem auto 2.5rem;
@@ -188,7 +203,7 @@ p:last-child {
 /* Scroll-reveal */
 .reveal {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(var(--reveal-distance));
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
@@ -224,7 +239,7 @@ p:last-child {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 0 1.5rem;
+  padding: 0 var(--pad-h);
 }
 
 /* Centred nav links */
@@ -269,7 +284,7 @@ p:last-child {
 /* Purple hat icon — top left */
 .nav-home-icon {
   position: absolute;
-  left: 1.5rem;
+  left: var(--pad-h);
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -292,7 +307,7 @@ p:last-child {
 .nav-toggle {
   display: none;
   position: absolute;
-  right: 1.5rem;
+  right: var(--pad-h);
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -344,7 +359,7 @@ p:last-child {
 .nav-overlay-close {
   position: absolute;
   top: 1.25rem;
-  right: 1.5rem;
+  right: var(--pad-h);
   background: none;
   border: none;
   color: var(--color-text);
@@ -370,7 +385,7 @@ p:last-child {
   text-align: center;
   position: relative;
   overflow: hidden;
-  padding: calc(var(--nav-height) + 3rem) 1.5rem 5rem;
+  padding: calc(var(--nav-height) + 3rem) var(--pad-h) var(--section-pad-v);
   background:
     /* Purple-tinted weave — sits on top of gradients, matches the plum atmosphere */
     repeating-linear-gradient(
@@ -504,7 +519,7 @@ p:last-child {
 /* ─── 7. SECTIONS & LAYOUT ─────────────────────────── */
 
 .section {
-  padding: 5rem 1.5rem;
+  padding: var(--section-pad-v) var(--pad-h);
   position: relative;
 }
 
@@ -591,7 +606,7 @@ p:last-child {
   min-height: 35vh;
   display: flex;
   align-items: flex-end;
-  padding: calc(var(--nav-height) + 3rem) 1.5rem 3rem;
+  padding: calc(var(--nav-height) + 3rem) var(--pad-h) 3rem;
   background:
     /* Purple weave — fixed to viewport, continuous with hero weave */
     repeating-linear-gradient(
@@ -736,7 +751,7 @@ p:last-child {
   position: relative;
   overflow: hidden;
   aspect-ratio: 2 / 3;
-  background: linear-gradient(145deg, #2A1F30 0%, #1A1A2E 55%, #0E1A1C 100%);
+  background: var(--cover-placeholder-bg);
 }
 
 .novel-card-cover img {
@@ -808,7 +823,7 @@ p:last-child {
 .cover-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(145deg, #2A1F30 0%, #1A1A2E 55%, #0E1A1C 100%);
+  background: var(--cover-placeholder-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -850,8 +865,8 @@ p:last-child {
   background: rgba(18,14,10,0.88);
   border: 1px solid var(--color-border);
   color: var(--color-gold);
-  width: 42px;
-  height: 42px;
+  width: var(--carousel-btn-size);
+  height: var(--carousel-btn-size);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -880,7 +895,7 @@ p:last-child {
 /* ─── 10. NOVEL DETAIL PAGE ────────────────────────── */
 
 .novel-detail {
-  padding: calc(var(--nav-height) + 5rem) 1.5rem 5rem;
+  padding: calc(var(--nav-height) + var(--section-pad-v)) var(--pad-h) var(--section-pad-v);
 }
 
 .novel-detail-inner {
@@ -908,7 +923,7 @@ p:last-child {
 }
 
 .novel-detail-cover .cover-placeholder {
-  background: linear-gradient(145deg, #2A1F30, #1A1A2E);
+  background: var(--cover-placeholder-bg);
   border: 1px solid var(--color-border);
 }
 
@@ -1008,7 +1023,7 @@ p:last-child {
 .fanart-empty {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 5rem 2rem;
+  padding: var(--section-pad-v) 2rem;
   color: var(--color-muted);
   font-style: italic;
   font-size: 1.05rem;
@@ -1025,7 +1040,7 @@ p:last-child {
   background: rgba(0,0,0,0.93);
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: var(--pad-h);
 }
 
 .lightbox.open {
@@ -1051,7 +1066,7 @@ p:last-child {
 .lightbox-close {
   position: fixed;
   top: 1.25rem;
-  right: 1.5rem;
+  right: var(--pad-h);
   background: none;
   border: none;
   color: var(--color-text);
@@ -1118,7 +1133,7 @@ p:last-child {
   background: rgba(0,0,0,0.92);
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: var(--pad-h);
 }
 
 .chapter-modal.open {
@@ -1129,7 +1144,7 @@ p:last-child {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  max-width: 740px;
+  max-width: var(--modal-max-w);
   width: 100%;
   max-height: 88vh;
   display: flex;
@@ -1234,7 +1249,7 @@ p:last-child {
 .site-footer {
   background: var(--color-bg-surface);
   border-top: 1px solid var(--color-border);
-  padding: 3rem 1.5rem 2.5rem;
+  padding: 3rem var(--pad-h) 2.5rem;
   text-align: center;
 }
 

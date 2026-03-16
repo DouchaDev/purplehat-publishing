@@ -2,80 +2,80 @@
    PURPLEHAT PUBLISHING — MAIN JAVASCRIPT
    ================================================
 
-   CONTENT MANAGEMENT — edit these arrays to update the site:
+   CONTENT — two sources, tried in order:
+   1. Google Sheet (if CONFIG.sheetId is set)       ← preferred
+   2. Fallback arrays below                          ← used until sheet is set up
 
-   NOVELS  → Add/edit books. Drop cover images in assets/images/covers/.
-             Set chapterFile to load a first chapter in the reader.
+   GOOGLE SHEET SETUP:
+     1. Create a Google Sheet with two tabs named exactly:  Novels  and  FanArt
+     2. Add column headers in row 1 (see column guide below)
+     3. File → Share → Share with others → set to "Anyone with the link" → Viewer
+     4. Copy the Sheet ID from the URL:
+          https://docs.google.com/spreadsheets/d/ ►SHEET_ID◄ /edit
+     5. Paste it into CONFIG.sheetId below
 
-   FANART  → Add/edit fan art or concept images.
-             Drop images in assets/images/fanart/.
+   NOVELS tab columns (row 1 headers, order doesn't matter):
+     id          | URL slug, e.g.  the-iron-crown
+     title       | Full title
+     subtitle    | Optional subtitle (leave blank if none)
+     tagline     | Short one-liner for carousel card
+     synopsis    | Full blurb (can be long — Google Sheets handles multiline)
+     cover       | Full image URL (GitHub raw URL, imgur, etc.) — blank if none
+     genres      | Pipe-separated, e.g.  Fantasy|Adventure|Epic
+     featured    | TRUE to show on home page, FALSE otherwise
+     chapterFile | URL to a .txt file, or blank
+     buyLabel    | Button text, e.g.  Buy on Amazon  (blank = no button)
+     buyUrl      | Purchase URL (blank = no button)
 
-   SOCIAL_LINKS → Update href values with real social media URLs.
+   FANART tab columns:
+     id    | Unique identifier, e.g.  art-1
+     src   | Full image URL
+     title | Display title
+     alt   | Accessibility description
+
+   SOCIAL_LINKS — update the four URLs below with real profile links.
 
    ================================================ */
 
 
-/* ─── NOVEL DATA ──────────────────────────────────── */
-/*
-  Each novel object:
-  {
-    id:          'unique-slug',        // used in URL: novel-detail.html?id=<slug>
-    title:       'Novel Title',
-    subtitle:    'Optional subtitle',
-    tagline:     'Short tagline',
-    synopsis:    'Full synopsis paragraph(s).',
-    cover:       'assets/images/covers/<slug>.jpg',  // null if no image yet
-    genres:      ['Fantasy', 'Adventure'],
-    featured:    true,                 // shows on home page
-    chapterFile: 'assets/chapters/<slug>.txt',       // null if not ready
-    buyLinks:    [{ label: 'Buy on Amazon', url: 'https://...' }]
-  }
-*/
-const NOVELS = [
+/* ─── CONFIGURATION ───────────────────────────────── */
+
+const CONFIG = {
+  // Paste your Google Sheet ID here once the sheet is set up.
+  // Leave as null to use the fallback arrays below.
+  sheetId: '1ylYmry1A-C4a-PL5V4H-DR4bI8rGd4ftjh9Gt0lkO1Y',   // e.g. '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms'
+};
+
+
+/* ─── FALLBACK NOVEL DATA ─────────────────────────── */
+/* Used when CONFIG.sheetId is null or the fetch fails. */
+
+let NOVELS = [
   {
     id: 'novel-one',
     title: 'Title Coming Soon',
     subtitle: '',
     tagline: 'An epic fantasy adventure awaits',
-    synopsis: 'The full synopsis for this novel will appear here. Replace this placeholder text with your own description — the world, the stakes, and the hero who must face them. Make it compelling enough that readers cannot help but turn the first page.',
-    cover: null,           // replace with: 'assets/images/covers/novel-one.jpg'
+    synopsis: 'The full synopsis for this novel will appear here. Replace this placeholder text with your own description — the world, the stakes, and the hero who must face them.',
+    cover: null,
     genres: ['Fantasy', 'Adventure'],
     featured: true,
-    chapterFile: null,     // replace with: 'assets/chapters/novel-one.txt'
-    buyLinks: []
-  },
-  {
-    id: 'novel-two',
-    title: 'Second Novel',
-    subtitle: '',
-    tagline: 'Worlds beyond imagination',
-    synopsis: 'Placeholder synopsis for the second novel. Replace this with your own description when ready.',
-    cover: null,
-    genres: ['Fantasy', 'Epic'],
-    featured: false,
     chapterFile: null,
     buyLinks: []
-  }
+  },
 ];
 
 
-/* ─── FAN ART / CONCEPTS DATA ─────────────────────── */
-/*
-  Each item:
-  { id: 'art-1', src: 'assets/images/fanart/art-1.jpg', title: 'Title', alt: 'Description' }
+/* ─── FALLBACK FAN ART DATA ───────────────────────── */
+/* Used when CONFIG.sheetId is null or the fetch fails. */
 
-  Drop images in assets/images/fanart/ and add entries here.
-*/
-const FANART = [
-  // Example (remove the leading // to activate):
-  // { id: 'art-1', src: 'assets/images/fanart/art-1.jpg', title: 'Concept Art 1', alt: 'Concept artwork description' },
+let FANART = [
+  // { id: 'art-1', src: 'https://...', title: 'Concept Art 1', alt: 'Description' },
 ];
 
 
 /* ─── SOCIAL LINKS ────────────────────────────────── */
-/*
-  Replace '#' with your actual social media profile URLs.
-*/
+
 const SOCIAL_LINKS = {
   instagram: '#',   // e.g. 'https://www.instagram.com/yourhandle'
   facebook:  '#',   // e.g. 'https://www.facebook.com/yourpage'
@@ -88,10 +88,11 @@ const SOCIAL_LINKS = {
    INITIALISATION
    ================================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initNav();
   renderFooter();
   initScrollReveal();
+  await loadSheetData();   // replaces NOVELS / FANART if sheet is configured
   renderFeaturedNovels();
   renderNovelCards();
   renderFanArt();
@@ -100,6 +101,94 @@ document.addEventListener('DOMContentLoaded', () => {
   initLightbox();
   initNovelDetail();
 });
+
+
+/* ─── GOOGLE SHEETS DATA LOADER ───────────────────── */
+
+async function loadSheetData() {
+  if (!CONFIG.sheetId) return;
+
+  const base = `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?tqx=out:csv&sheet=`;
+
+  await Promise.all([
+    fetchSheet(base + 'Novels')
+      .then(rows => { if (rows.length) NOVELS = parseNovels(rows); })
+      .catch(() => { /* network failure — keep fallback array */ }),
+
+    fetchSheet(base + 'FanArt')
+      .then(rows => { if (rows.length) FANART = parseFanArt(rows); })
+      .catch(() => { /* network failure — keep fallback array */ }),
+  ]);
+  // Debug: list loaded IDs (helps diagnose mismatches between sheet and fallback)
+  try { console.debug('loadSheetData: NOVELS ids =', NOVELS.map(n => n.id)); } catch (e) { /* ignore */ }
+}
+
+/* Fetch a sheet tab and return an array of row objects keyed by header name */
+async function fetchSheet(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Sheet fetch failed: ${res.status}`);
+  const text = await res.text();
+  const rows = parseCSV(text);
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(h => h.trim().toLowerCase());
+  return rows.slice(1)
+    .map(cells => Object.fromEntries(headers.map((h, i) => [h, (cells[i] || '').trim()])))
+    .filter(r => Object.values(r).some(v => v)); // skip fully blank rows
+}
+
+/* RFC 4180 CSV parser — handles quoted fields, embedded commas, newlines */
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
+      else if (ch === '"')                   { inQuotes = false; }
+      else                                   { field += ch; }
+    } else {
+      if      (ch === '"')  { inQuotes = true; }
+      else if (ch === ',')  { row.push(field); field = ''; }
+      else if (ch === '\n') { row.push(field); field = ''; rows.push(row); row = []; }
+      else if (ch === '\r') { /* skip */ }
+      else                  { field += ch; }
+    }
+  }
+  row.push(field);
+  if (row.some(f => f)) rows.push(row);
+  return rows;
+}
+
+/* Map sheet rows → NOVELS array entries */
+function parseNovels(rows) {
+  return rows
+    .filter(r => r.id && r.title)
+    .map(r => ({
+      id:          r.id,
+      title:       r.title,
+      subtitle:    r.subtitle  || '',
+      tagline:     r.tagline   || '',
+      synopsis:    r.synopsis  || '',
+      cover:       r.cover     || null,
+      genres:      r.genres ? r.genres.split(',').map(g => g.trim()).filter(Boolean) : [],
+      featured:    r.featured?.toLowerCase() === 'true',
+      chapterFile: r.chapterfile || null,
+      buyLinks:    (r.buylabel && r.buyurl) ? [{ label: r.buylabel, url: r.buyurl }] : [],
+    }));
+}
+
+/* Map sheet rows → FANART array entries */
+function parseFanArt(rows) {
+  return rows
+    .filter(r => r.id && r.src)
+    .map(r => ({
+      id:    r.id,
+      src:   r.src,
+      title: r.title || '',
+      alt:   r.alt   || r.title || '',
+    }));
+}
 
 
 /* ─── NAVIGATION ──────────────────────────────────── */
@@ -491,7 +580,15 @@ function initNovelDetail() {
   const novel  = NOVELS.find(n => n.id === params.get('id'));
 
   if (!novel) {
-    container.innerHTML = '<p style="text-align:center;color:var(--color-muted);padding:5rem;font-style:italic">Novel not found.</p>';
+    const requested = params.get('id');
+    const available = NOVELS.map(n => n.id).join(', ') || 'none';
+    container.innerHTML = `
+      <p style="text-align:center;color:var(--color-muted);padding:2rem;font-style:italic">
+        Novel not found for id "${escapeHtml(requested || '')}".<br>
+        Available ids: ${escapeHtml(available)}
+      </p>
+    `;
+    console.warn('novel-detail: requested id', requested, 'available ids', NOVELS.map(n => n.id));
     return;
   }
 

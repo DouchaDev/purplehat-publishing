@@ -64,14 +64,13 @@
   /* Animation */
   --reveal-distance: 24px;     /* scroll-reveal translateY offset */
 
-  /* Weave Params */
-  --weavescale-transparent: 4px;   /* horizontal spacing of weave lines */
-  --weavescale-xs: 128px;   /* horizontal spacing of weave lines */
-  --weavescale-sm: 192px;   /* horizontal spacing of weave lines */
-  --weavescale-md: 128px;  /* horizontal spacing of weave lines */
-  --weavescale-lg: 192px;  /* horizontal spacing of weave lines */
-  --weave-degrees-1: 135deg;  /* angle of first weave layer */
-  --weave-degrees-2: 45deg;   /* angle of second weave layer */
+  /* Texture sizes
+     --texture-parchment-size: coarse fixed layer — "100vw 100vh" fills the entire
+       viewport as one image (no tiling = no visible seams). Change to e.g. "600px"
+       to tile instead, but expect seam lines at tile boundaries.
+     --texture-grain-size: fine grain tile — small enough to repeat invisibly */
+  --texture-parchment-size: 100vw 100vh;
+  --texture-grain-size:     300px;
 }
 
 
@@ -97,31 +96,20 @@ body {
   display: flex;
   flex-direction: column;
   /*
-    Parchment grain — three layers stacked:
-    1. Warm amber-tinted SVG turbulence noise (feColorMatrix shifts R/G/B so
-       the grain reads as warm gold rather than invisible grey on dark brown)
-    2. 135° repeating diagonal — one direction of the linen crosshatch
-    3.  45° repeating diagonal — other direction, together forming a canvas weave
+    Parchment / stone grain — two SVG turbulence layers:
+    1. Coarse organic mottling — edit assets/images/site/noise-coarse.svg to tune
+       the noise parameters (baseFrequency, numOctaves, seed, opacity).
+       Fixed to viewport at 100vw×100vh = one image covers the whole viewport,
+       zero tiling, zero seams, anchored continuously across all sections.
+    2. Fine surface grain — high-frequency data-URI, scrolls with content.
   */
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(
-      var(--weave-degrees-1),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(180, 118, 38, 0.030) var(--weavescale-xs),
-      rgba(180, 118, 38, 0.030) var(--weavescale-sm)
-    ),
-    repeating-linear-gradient(
-      var(--weave-degrees-2),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(180, 118, 38, 0.024) var(--weavescale-xs),
-      rgba(180, 118, 38, 0.024) var(--weavescale-sm)
-    );
-  /* noise scrolls with content; weave layers are fixed to viewport so the
-     pattern is one continuous sheet — no restart at section boundaries */
-  background-attachment: scroll, fixed, fixed;
+    url('../images/site/noise-coarse.svg');/*,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");*/
+  background-size: var(--texture-parchment-size), var(--texture-grain-size);
+  background-repeat: no-repeat, repeat;
+  /* coarse layer fixed (one viewport-sized tile, no seams); fine grain scrolls */
+  background-attachment: fixed, scroll;
 }
 
 main {
@@ -387,29 +375,16 @@ p:last-child {
   overflow: hidden;
   padding: calc(var(--nav-height) + 3rem) var(--pad-h) var(--section-pad-v);
   background:
-    /* Purple-tinted weave — sits on top of gradients, matches the plum atmosphere */
-    repeating-linear-gradient(
-      var(--weave-degrees-1),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(80, 55, 140, 0.045) var(--weavescale-md),
-      rgba(80, 55, 140, 0.045) var(--weavescale-lg)
-    ),
-    repeating-linear-gradient(
-      var(--weave-degrees-2),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(80, 55, 140, 0.036) var(--weavescale-md),
-      rgba(80, 55, 140, 0.036) var(--weavescale-lg)
-    ),
+    url('../images/site/noise-coarse.svg'),
     /* Atmosphere gradients */
     radial-gradient(ellipse at 15% 60%, rgba(61,  43, 94,  0.45) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 25%, rgba(74, 139,127,  0.22) 0%, transparent 48%),
     radial-gradient(ellipse at 50% 85%, rgba(168, 48, 32,  0.18) 0%, transparent 45%),
     radial-gradient(ellipse at 50% 10%, rgba(201,169,110,  0.08) 0%, transparent 60%),
     linear-gradient(170deg, #0E0B07 0%, #1C1008 45%, #0A0806 100%);
-  /* weave (layers 1–2) fixed to viewport; atmosphere gradients scroll with element */
-  background-attachment: fixed, fixed, scroll, scroll, scroll, scroll, scroll;
+  background-size: var(--texture-parchment-size), auto, auto, auto, auto, auto;
+  /* parchment fixed (anchors with body); atmosphere gradients scroll with element */
+  background-attachment: fixed, scroll, scroll, scroll, scroll, scroll;
 }
 
 /* Warm amber noise layer over hero — fixed so it aligns with body noise */
@@ -555,13 +530,13 @@ p:last-child {
 }
 
 .section-dark {
-  /* Slightly stronger warm grain on mid-tone surfaces */
   background-color: var(--color-bg-surface);
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.19 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.034) var(--weavescale-xs), rgba(180,118,38,0.034) var(--weavescale-sm)),
-    repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.028) var(--weavescale-xs), rgba(180,118,38,0.028) var(--weavescale-sm));
-  background-attachment: scroll, fixed, fixed;
+    url('../images/site/noise-coarse.svg');/*,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.06 0.4 0 0 0 0.03 0.15 0 0 0 0.01 0 0 0 0.19 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");*/
+  background-size: var(--texture-parchment-size), var(--texture-grain-size);
+  background-repeat: no-repeat, repeat;
+  background-attachment: fixed, scroll;
 }
 
 /* Pull-quote — most prominent parchment moment on the page */
@@ -570,10 +545,11 @@ p:last-child {
   /* Warmer, lighter surface + strongest grain — this is the "Dark Crystal parchment" strip */
   background-color: #2C1A09;
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.07 0.4 0 0 0 0.04 0.15 0 0 0 0.01 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E"),
-    repeating-linear-gradient(var(--weave-degrees-1), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.040) var(--weavescale-xs), rgba(180,118,38,0.040) var(--weavescale-sm)),
-    repeating-linear-gradient(var(--weave-degrees-2), transparent, transparent var(--weavescale-transparent), rgba(180,118,38,0.032) var(--weavescale-xs), rgba(180,118,38,0.032) var(--weavescale-sm));
-  background-attachment: scroll, fixed, fixed;
+    url('../images/site/noise-coarse.svg');/*,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.7 0 0 0 0.07 0.4 0 0 0 0.04 0.15 0 0 0 0.01 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");*/
+  background-size: var(--texture-parchment-size), var(--texture-grain-size);
+  background-repeat: no-repeat, repeat;
+  background-attachment: fixed, scroll;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   text-align: center;
@@ -608,27 +584,14 @@ p:last-child {
   align-items: flex-end;
   padding: calc(var(--nav-height) + 3rem) var(--pad-h) 3rem;
   background:
-    /* Purple weave — fixed to viewport, continuous with hero weave */
-    repeating-linear-gradient(
-      var(--weave-degrees-1),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(80, 55, 140, 0.045) var(--weavescale-md),
-      rgba(80, 55, 140, 0.045) var(--weavescale-lg)
-    ),
-    repeating-linear-gradient(
-      var(--weave-degrees-2),
-      transparent,
-      transparent var(--weavescale-transparent),
-      rgba(80, 55, 140, 0.036) var(--weavescale-md),
-      rgba(80, 55, 140, 0.036) var(--weavescale-lg)
-    ),
+    url('../images/site/noise-coarse.svg'),
     /* Atmosphere */
     radial-gradient(ellipse at 20% 80%, rgba(61, 43, 94, 0.4) 0%, transparent 55%),
     radial-gradient(ellipse at 80% 20%, rgba(74,139,127, 0.2) 0%, transparent 50%),
     linear-gradient(170deg, #0E0B07 0%, #1A1008 100%);
-  /* weave fixed; atmosphere scrolls with element */
-  background-attachment: fixed, fixed, scroll, scroll, scroll;
+  background-size: var(--texture-parchment-size), auto, auto, auto;
+  /* parchment fixed; atmosphere scrolls with element */
+  background-attachment: fixed, scroll, scroll, scroll;
   position: relative;
   overflow: hidden;
 }
@@ -1376,7 +1339,7 @@ p:last-child {
 
 /* iOS Safari / touch-device fallback — background-attachment:fixed is broken
    on most mobile browsers (renders as scroll or causes repaint jank).
-   On touch devices the weave restarts per-section, which is acceptable. */
+   On touch devices the parchment texture restarts per-section, which is acceptable. */
 @media (hover: none) and (pointer: coarse) {
   body,
   .section-dark,

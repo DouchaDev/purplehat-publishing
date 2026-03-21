@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PARCHMENT / STONE COARSE TEXTURE  ·  noise-coarse.svg
+  ======================================================
+  Used as the primary background texture across all pages.
+  Edit the values below and save — no build step needed.
+
+  ── baseFrequency="0.028 0.042" ────────────────────────────────────────
+     Two values = anisotropic grain (different horizontal / vertical density).
+     Lower  →  larger patches, boulder / cave-wall feel
+     Higher →  tighter mottling, rough stone / pumice feel
+     Equal  →  isotropic (same grain in all directions)
+     Try:   "0.01 0.02" (large stone)  |  "0.05 0.07" (rough parchment)
+            "0.10 0.10" (tight grain)  |  "0.02 0.02" (cloudy mottling)
+
+  ── numOctaves="5" ─────────────────────────────────────────────────────
+     Number of noise layers stacked (more = more fractal detail).
+     2–3  →  smooth blobs, foggy parchment
+     4–6  →  complex organic grain   (above 6 is slower in some browsers)
+
+  ── seed="8" ───────────────────────────────────────────────────────────
+     Integer that seeds the random pattern. Any value changes the arrangement
+     of patches entirely. Try 1–30 to audition different layouts.
+
+  ── feColorMatrix values ────────────────────────────────────────────────
+     Controls colour and opacity of the noise output.
+     Format per row:   [R_mult]  [G_mult]  [B_mult]  [A_mult]  [constant]
+     Row 1 (Red):    0.65  0  0  0  0.06  ← raise constant for more orange warmth
+     Row 2 (Green):  0.38  0  0  0  0.032
+     Row 3 (Blue):   0.12  0  0  0  0.01  ← raise blue for cooler stone / grey
+     Row 4 (Alpha):  0     0  0  0  0.28  ← OPACITY  (0.10 subtle ↔ 0.55 dramatic)
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200">
+  <filter id="coarse">
+
+    <feTurbulence
+      type="fractalNoise"
+      baseFrequency="0.028 0.042"
+      numOctaves="5"
+      seed="8"
+      stitchTiles="stitch"
+    />
+
+    <feColorMatrix
+      type="matrix"
+      values="0.65 0    0    0    0.06
+              0.38 0    0    0    0.032
+              0.12 0    0    0    0.01
+              0    0    0    0    0.28"
+    />
+
+  </filter>
+  <rect width="1200" height="1200" filter="url(#coarse)"/>
+</svg>
+<!--
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200">
+  <filter id="coarse">
+
+    <feTurbulence
+      type="fractalNoise"
+      baseFrequency="0.0028 0.0042"
+      numOctaves="1"
+      seed="8"
+      stitchTiles="stitch"
+    />
+
+    <feColorMatrix
+      type="matrix"
+      values="0.65 0    0    0    0.06
+              0.38 0    0    0    0.032
+              0.12 0    0    0    0.01
+              0    0    0    0    0.28"
+    />
+
+  </filter>
+  <rect width="1200" height="1200" filter="url(#coarse)"/>
+</svg>-->

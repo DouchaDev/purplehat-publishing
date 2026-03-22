@@ -1,0 +1,92 @@
+/* ── users.css ───────────────────────────────────────────────────────────────
+   Page-specific styles for users.html.
+   All values reference CSS custom properties defined in style.css,
+   so the table automatically matches the site's woodcut aesthetic.
+
+   Variables used (defined in style.css :root):
+     --font-heading      = Cinzel (used for th labels)
+     --font-body         = Lora (used for td content)
+     --color-gold        = #C9A96E (accent colour for th text)
+     --color-border      = rgba(201,169,110,0.2) (subtle gold border)
+     --color-text        = #F0EBE1 (cream body text)
+     --color-muted       = #9A8E80 (secondary/muted text)
+     --color-teal        = #4A8B7F (active badge colour)
+     --color-bg-elevated = #2A1A0A (hover row background)
+     --color-red         = error text colour
+     --radius            = 4px (sharp corners — ink print feel)
+──────────────────────────────────────────────────────────────────────────── */
+
+.users-table-wrap {
+  overflow-x: auto; /* allows horizontal scroll on narrow screens */
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse; /* removes gaps between cell borders */
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.users-table th {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.users-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.users-table tr:last-child td {
+  border-bottom: none; /* no border after the final row */
+}
+
+.users-table tbody tr:hover td {
+  background: var(--color-bg-elevated);
+}
+
+/* Status badges — small labelled pills */
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.65rem;
+  border-radius: var(--radius);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--font-heading);
+}
+
+.badge-active {
+  background: rgba(74, 139, 127, 0.15);
+  color: var(--color-teal);
+  border: 1px solid rgba(74, 139, 127, 0.35);
+}
+
+.badge-inactive {
+  background: rgba(154, 142, 128, 0.08);
+  color: var(--color-muted);
+  border: 1px solid rgba(154, 142, 128, 0.2);
+}
+
+/* Centred status messages (loading / error / empty) */
+.users-status {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+[v-cloak] .users-status.error {
+  display: none; /* hide status messages until Vue takes control */
+}
+
+.users-status.error {
+  color: var(--color-red);
+}

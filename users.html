@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users — Purplehat Publishing</title>
+
+  <!-- Google Fonts — same as every other page -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome — same as every other page -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Shared stylesheet — all CSS variables and base styles come from here -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Page-specific styles for the users table, badges, and status messages -->
+  <link rel="stylesheet" href="assets/css/users.css">
+</head>
+<body>
+
+  <!-- ═══ HEADER / NAV ═════════════════════════════════════════════
+       Identical structure to every other page.
+       initNav() in main.js reads window.location.pathname and adds
+       the .active class to whichever <a> href matches the current page,
+       so "Users" will be highlighted automatically when you're here.
+  ══════════════════════════════════════════════════════════════════ -->
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="index.html" class="nav-home-icon" aria-label="Home">
+        <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hayden.html">Hayden</a></li>
+        <li><a href="novels.html">Novels</a></li>
+        <li><a href="concepts.html">Concepts/Fan Art</a></li>
+        <li><a href="users.html">Users</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Mobile nav overlay -->
+  <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
+    <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hayden.html">Hayden</a></li>
+      <li><a href="novels.html">Novels</a></li>
+      <li><a href="concepts.html">Concepts/Fan Art</a></li>
+      <li><a href="users.html">Users</a></li>
+    </ul>
+  </nav>
+
+
+  <main>
+
+    <!-- Page hero — matches the style of concepts.html / hayden.html -->
+    <section class="page-hero" aria-label="Users page header">
+      <div class="page-hero-content">
+        <h1>Users</h1>
+        <p class="page-hero-sub">Registered members</p>
+      </div>
+    </section>
+
+
+    <!-- ═══ VUE APPLICATION ROOT ══════════════════════════════════════
+         Everything inside <section id="app"> is controlled by Vue.
+         Vue reads the special v-* attributes and {{ }} expressions,
+         and takes over managing the DOM inside this element.
+
+         IMPORTANT: Vue does NOT touch anything outside #app.
+         The header, footer, and page-hero above are plain HTML —
+         Vue is only responsible for the table section below.
+    ══════════════════════════════════════════════════════════════════ -->
+    <section class="section" id="app" v-cloak>
+      <div class="section-inner">
+
+        <h2 class="section-heading">Registered Users</h2>
+        <div class="gold-divider"></div>
+
+
+        <!-- v-if / v-else-if / v-else  ─────────────────────────────
+             These three directives form a conditional block.
+             Only ONE of the three elements below is in the DOM at a time.
+             Vue adds/removes them as the values of loading and error change.
+
+             Think of it like an if/else chain in JS:
+               if (loading)        → show spinner
+               else if (error)     → show error message
+               else                → show the table (or empty state)
+        ──────────────────────────────────────────────────────────── -->
+
+        <!-- Shown while the fetch() is in progress (loading === true) -->
+        <p v-if="loading" class="users-status">
+          <i class="fas fa-circle-notch fa-spin"></i>&ensp;Loading users&hellip;
+        </p>
+
+        <!-- Shown if the fetch threw an error (error !== null) -->
+        <p v-else-if="error" class="users-status error">
+          <i class="fas fa-exclamation-triangle"></i>&ensp;{{ error }}
+        </p>
+
+        <!-- Shown when loading is done and there was no error -->
+        <!-- <template> is a Vue wrapper that renders nothing itself —
+             it lets us group v-else logic without adding an extra HTML element -->
+        <template v-else>
+
+          <!-- If the users array is empty after a successful fetch -->
+          <p v-if="users.length === 0" class="users-status">
+            No users found in the database.
+          </p>
+
+          <!-- v-else here means: loading=false, error=null, users.length > 0 -->
+          <div v-else class="users-table-wrap">
+            <table class="users-table" aria-label="Registered users">
+              <thead>
+                <tr>
+                <!--  <th scope="col">ID</th>-->
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- v-for ─────────────────────────────────────────────────
+                     Renders a <tr> for every item in the users array.
+                     Syntax: v-for="itemVariable in arrayRef"
+                     On each iteration, 'user' is the current array element —
+                     an object like { id: 1, name: 'Hayden', email: '...', active: true }
+
+                     :key is required on v-for elements.
+                     It gives Vue a stable identity for each row so it can
+                     efficiently update only the rows that actually changed
+                     instead of re-rendering the whole table.
+                     Always use a unique, stable value — database id is perfect.
+                ──────────────────────────────────────────────────────── -->
+                <tr v-for="user in users" :key="user.id">
+
+                  <!-- {{ }} interpolation ───────────────────────────────
+                       Outputs the value as escaped text (safe from XSS).
+                       Vue evaluates the JS expression between the braces.
+                  ────────────────────────────────────────────────────── -->
+                 <!-- <td>{{ user.id }}</td>-->
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.email }}</td>
+
+                  <td>
+                    <!-- :class — dynamic class binding ───────────────────
+                         The colon (:) prefix means the attribute value is
+                         a JavaScript expression, not a plain string.
+                         Vue evaluates the ternary and applies the result as
+                         the class attribute.
+                         user.active ? 'badge badge-active' : 'badge badge-inactive'
+                    ────────────────────────────────────────────────────── -->
+                    <span :class="user.active ? 'badge badge-active' : 'badge badge-inactive'">
+                      {{ user.active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </template>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ═══ FOOTER ═══════════════════════════════════════════════════
+       renderFooter() in main.js injects the footer HTML here,
+       exactly as it does on every other page.
+  ══════════════════════════════════════════════════════════════════ -->
+  <footer class="site-footer" id="site-footer" aria-label="Site footer"></footer>
+
+
+  <!-- ═══ SCRIPTS ══════════════════════════════════════════════════
+       Load order matters:
+         1. Vue 3 CDN  — must come first so the global 'Vue' object exists
+         2. main.js    — runs renderFooter() and initNav() for this page
+         3. Our script — uses Vue to mount the #app component
+
+       Using Vue from a CDN means zero build tools, zero npm for this page.
+       The trade-off is a slightly larger download (~34 KB) and no
+       tree-shaking, but for learning this is perfectly fine.
+       In production you'd use Vite + npm, but the Vue API is identical.
+  ══════════════════════════════════════════════════════════════════ -->
+
+  <!-- Vue 3 global build — exposes window.Vue with all exports -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- main.js handles: renderFooter(), initNav(), mobile hamburger menu -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- Vue application — must load after vue.global.js and main.js -->
+  <script src="assets/js/users.js"></script>
+
+</body>
+</html>

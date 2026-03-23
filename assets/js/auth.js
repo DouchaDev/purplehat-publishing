@@ -32,6 +32,16 @@ const ERROR_MESSAGES = {
   cannot_demote_self:  'You cannot remove your own admin role.',
 };
 
+// Why DOMContentLoaded here?
+// Scripts at the bottom of <body> run BEFORE DOMContentLoaded fires.
+// main.js registers its DOMContentLoaded listener first (it loads first), so when
+// DOMContentLoaded fires, main.js runs initAuth() which creates #auth-modal-app.
+// Only THEN does our listener run and find the element to mount onto.
+// Without this wrapper, .mount('#auth-modal-app') would silently fail because
+// the element doesn't exist yet, setup() would never run, and window.authApp
+// would never be set — so clicking Sign In would do nothing.
+document.addEventListener('DOMContentLoaded', () => {
+
 createApp({
   // ── TEMPLATE ────────────────────────────────────────────────────────────────
   // The template is defined inline here (no separate .html file).
@@ -245,3 +255,5 @@ createApp({
   }
 
 }).mount('#auth-modal-app');
+
+}); // end DOMContentLoaded

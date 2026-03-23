@@ -18,44 +18,14 @@
 
   <!-- Page-specific styles for the users table, badges, and status messages -->
   <link rel="stylesheet" href="assets/css/users.css">
+
+  <!-- Auth modal and nav auth area styles -->
+  <link rel="stylesheet" href="assets/css/auth.css">
 </head>
 <body>
 
-  <!-- ═══ HEADER / NAV ═════════════════════════════════════════════
-       Identical structure to every other page.
-       initNav() in main.js reads window.location.pathname and adds
-       the .active class to whichever <a> href matches the current page,
-       so "Users" will be highlighted automatically when you're here.
-  ══════════════════════════════════════════════════════════════════ -->
-  <header class="site-header">
-    <nav class="site-nav" aria-label="Main navigation">
-      <a href="index.html" class="nav-home-icon" aria-label="Home">
-        <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
-      </a>
-      <ul class="nav-links" role="list">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="hayden.html">Hayden</a></li>
-        <li><a href="novels.html">Novels</a></li>
-        <li><a href="concepts.html">Concepts/Fan Art</a></li>
-        <li><a href="users.html">Users</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
-  </header>
-
-  <!-- Mobile nav overlay -->
-  <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
-    <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
-    <ul class="nav-links" role="list">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="hayden.html">Hayden</a></li>
-      <li><a href="novels.html">Novels</a></li>
-      <li><a href="concepts.html">Concepts/Fan Art</a></li>
-      <li><a href="users.html">Users</a></li>
-    </ul>
-  </nav>
+  <!-- Nav injected by renderNav() in main.js -->
+  <div id="site-header"></div>
 
 
   <main>
@@ -101,9 +71,10 @@
           <i class="fas fa-circle-notch fa-spin"></i>&ensp;Loading users&hellip;
         </p>
 
-        <!-- Shown if the fetch threw an error (error !== null) -->
+        <!-- Shown if there is an error (auth required, forbidden, or network) -->
+        <!-- errorMessage computed in users.js maps the error code to a sentence -->
         <p v-else-if="error" class="users-status error">
-          <i class="fas fa-exclamation-triangle"></i>&ensp;{{ error }}
+          <i class="fas fa-exclamation-triangle"></i>&ensp;{{ errorMessage }}
         </p>
 
         <!-- Shown when loading is done and there was no error -->
@@ -121,10 +92,10 @@
             <table class="users-table" aria-label="Registered users">
               <thead>
                 <tr>
-                <!--  <th scope="col">ID</th>-->
                   <th scope="col">Name</th>
                   <th scope="col">Email</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Role</th>
                 </tr>
               </thead>
               <tbody>
@@ -146,21 +117,36 @@
                        Outputs the value as escaped text (safe from XSS).
                        Vue evaluates the JS expression between the braces.
                   ────────────────────────────────────────────────────── -->
-                 <!-- <td>{{ user.id }}</td>-->
                   <td>{{ user.name }}</td>
                   <td>{{ user.email }}</td>
 
+                  <!-- Active/Inactive status badge -->
                   <td>
-                    <!-- :class — dynamic class binding ───────────────────
-                         The colon (:) prefix means the attribute value is
-                         a JavaScript expression, not a plain string.
-                         Vue evaluates the ternary and applies the result as
-                         the class attribute.
-                         user.active ? 'badge badge-active' : 'badge badge-inactive'
-                    ────────────────────────────────────────────────────── -->
                     <span :class="user.active ? 'badge badge-active' : 'badge badge-inactive'">
                       {{ user.active ? 'Active' : 'Inactive' }}
                     </span>
+                  </td>
+
+                  <!-- Role column ─────────────────────────────────────────
+                       If this row belongs to the current user, show a static
+                       badge (can't change your own role — prevents lockout).
+                       For all other users, show a dropdown to change the role.
+
+                       currentUser comes from the computed in users.js.
+                       changeRole() sends PATCH /api/users/:id/role.
+                       $event.target.value reads the selected dropdown value.
+                  ──────────────────────────────────────────────────────── -->
+                  <td>
+                    <span v-if="currentUser && currentUser.id === user.id"
+                          class="badge" :class="user.role === 'admin' ? 'badge-admin' : 'badge-reader'">
+                      {{ user.role }}
+                    </span>
+                    <select v-else class="role-select"
+                            :value="user.role"
+                            @change="changeRole(user.id, $event.target.value)">
+                      <option value="reader">reader</option>
+                      <option value="admin">admin</option>
+                    </select>
                   </td>
                 </tr>
               </tbody>
@@ -197,10 +183,13 @@
   <!-- Vue 3 global build — exposes window.Vue with all exports -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-  <!-- main.js handles: renderFooter(), initNav(), mobile hamburger menu -->
+  <!-- main.js: renderNav(), initNav(), renderFooter(), initAuth() -->
   <script src="assets/js/main.js"></script>
 
-  <!-- Vue application — must load after vue.global.js and main.js -->
+  <!-- auth.js: Sign In/Sign Up modal Vue app. Must load after main.js. -->
+  <script src="assets/js/auth.js"></script>
+
+  <!-- users.js: Users table Vue app. Must load after auth.js. -->
   <script src="assets/js/users.js"></script>
 
 </body>

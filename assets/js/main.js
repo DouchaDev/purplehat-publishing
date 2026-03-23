@@ -89,8 +89,10 @@ const SOCIAL_LINKS = {
    ================================================ */
 
 document.addEventListener('DOMContentLoaded', async () => {
-  initNav();
+  renderNav();   // inject nav HTML from JS (one source of truth, like renderFooter)
+  initNav();     // add .active class to current page link, attach hamburger listeners
   renderFooter();
+  initAuth();    // read stored token → render Sign In or user name in nav
   initScrollReveal();
   await loadSheetData();   // replaces NOVELS / FANART if sheet is configured
   renderFeaturedNovels();
@@ -193,6 +195,47 @@ function parseFanArt(rows) {
 
 /* ─── NAVIGATION ──────────────────────────────────── */
 
+// renderNav() builds the full header HTML and injects it into <div id="site-header">.
+// This is the single source of truth for nav markup — the same pattern as renderFooter().
+// Every HTML page just has <div id="site-header"></div> as a placeholder.
+// Benefits: add/remove nav links in one place; auth button included here.
+function renderNav() {
+  const el = document.getElementById('site-header');
+  if (!el) return;
+  el.innerHTML = `
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html" class="nav-home-icon" aria-label="Home">
+          <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
+        </a>
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="hayden.html">Hayden</a></li>
+          <li><a href="novels.html">Novels</a></li>
+          <li><a href="concepts.html">Concepts/Fan Art</a></li>
+          <li><a href="users.html">Users</a></li>
+        </ul>
+        <div id="nav-auth-area" class="nav-auth-area"></div>
+        <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </header>
+    <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
+      <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
+      <ul class="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hayden.html">Hayden</a></li>
+        <li><a href="novels.html">Novels</a></li>
+        <li><a href="concepts.html">Concepts/Fan Art</a></li>
+        <li><a href="users.html">Users</a></li>
+      </ul>
+      <!-- Auth slot — populated by renderNavLoggedIn/Out(), shown only on mobile -->
+      <div id="nav-overlay-auth" class="nav-overlay-auth"></div>
+    </nav>
+  `;
+}
+
 function initNav() {
   // Highlight the active page link
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -214,6 +257,94 @@ function initNav() {
     overlay.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => overlay.classList.remove('open'));
     });
+  }
+}
+
+
+/* ─── AUTH STATE ──────────────────────────────────── */
+
+// decodeJwtPayload() decodes the middle (payload) section of a JWT without
+// verifying the signature. The payload is base64url encoded JSON.
+// This is safe to use CLIENT-SIDE for reading claims (id, name, role, exp).
+// The SERVER always re-verifies the full signature — client decoding is just
+// a convenience to avoid an extra network request on every page load.
+function decodeJwtPayload(token) {
+  try {
+    // A JWT is three base64url sections separated by dots: header.payload.signature
+    // atob() decodes base64 → we parse the result as JSON
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return null;
+  }
+}
+
+// initAuth() runs on every page after renderNav().
+// It reads the stored token from localStorage, checks it hasn't expired,
+// and renders either "Sign In" or "Name + Sign Out" in the nav auth area.
+// It also injects the <div> that auth.js mounts its Vue modal app onto.
+function initAuth() {
+  // Inject the mount point for the Vue auth modal (auth.js mounts onto this)
+  const mountDiv = document.createElement('div');
+  mountDiv.id = 'auth-modal-app';
+  document.body.appendChild(mountDiv);
+
+  // Read and validate the stored token
+  const token = localStorage.getItem('ph_token');
+  const user  = token ? decodeJwtPayload(token) : null;
+
+  // exp is a Unix timestamp (seconds). Multiply by 1000 to compare with Date.now() (ms).
+  if (user && user.exp * 1000 > Date.now()) {
+    renderNavLoggedIn(user);
+  } else {
+    // Token missing or expired — clear it and show Sign In
+    localStorage.removeItem('ph_token');
+    renderNavLoggedOut();
+  }
+}
+
+function renderNavLoggedIn(user) {
+  // Desktop nav bar
+  const area = document.getElementById('nav-auth-area');
+  if (area) {
+    area.innerHTML = `
+      <span class="nav-user-name">${escapeHtml(user.name)}</span>
+      <button id="nav-signout-btn" class="btn btn-sm btn-outline">Sign Out</button>
+    `;
+    document.getElementById('nav-signout-btn')
+      ?.addEventListener('click', () => window.authApp?.signOut());
+  }
+
+  // Mobile overlay — different IDs so both listeners can coexist
+  const overlayAuth = document.getElementById('nav-overlay-auth');
+  if (overlayAuth) {
+    overlayAuth.innerHTML = `
+      <span class="nav-user-name">${escapeHtml(user.name)}</span>
+      <button id="nav-overlay-signout-btn" class="btn btn-sm btn-outline">Sign Out</button>
+    `;
+    document.getElementById('nav-overlay-signout-btn')
+      ?.addEventListener('click', () => window.authApp?.signOut());
+  }
+}
+
+function renderNavLoggedOut() {
+  // Desktop nav bar
+  const area = document.getElementById('nav-auth-area');
+  if (area) {
+    area.innerHTML = `<button id="nav-signin-btn" class="btn btn-sm btn-outline">Sign In</button>`;
+    document.getElementById('nav-signin-btn')
+      ?.addEventListener('click', () => window.authApp?.open('signin'));
+  }
+
+  // Mobile overlay
+  const overlayAuth = document.getElementById('nav-overlay-auth');
+  if (overlayAuth) {
+    overlayAuth.innerHTML = `<button id="nav-overlay-signin-btn" class="btn btn-outline">Sign In</button>`;
+    document.getElementById('nav-overlay-signin-btn')
+      ?.addEventListener('click', () => {
+        // Close the overlay before opening the modal
+        document.querySelector('.nav-overlay')?.classList.remove('open');
+        window.authApp?.open('signin');
+      });
   }
 }
 

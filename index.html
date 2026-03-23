@@ -16,39 +16,12 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
 </head>
 <body>
 
-  <!-- ═══ HEADER / NAV ═════════════════════════════ -->
-  <header class="site-header">
-    <nav class="site-nav" aria-label="Main navigation">
-      <a href="index.html" class="nav-home-icon" aria-label="Home">
-        <img src="assets/images/logo-purplehat.svg" alt="Purplehat Publishing" width="34" height="36">
-      </a>
-      <ul class="nav-links" role="list">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="hayden.html">Hayden</a></li>
-        <li><a href="novels.html">Novels</a></li>
-        <li><a href="concepts.html">Concepts/Fan Art</a></li>
-        <li><a href="users.html">Users</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
-  </header>
-
-  <!-- Mobile nav overlay -->
-  <nav class="nav-overlay" role="navigation" aria-label="Mobile navigation">
-    <button class="nav-overlay-close" aria-label="Close navigation menu">&times;</button>
-    <ul class="nav-links" role="list">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="hayden.html">Hayden</a></li>
-      <li><a href="novels.html">Novels</a></li>
-      <li><a href="concepts.html">Concepts/Fan Art</a></li>
-      <li><a href="users.html">Users</a></li>
-    </ul>
-  </nav>
+  <!-- Nav injected by renderNav() in main.js -->
+  <div id="site-header"></div>
 
 
   <!-- ═══ MAIN CONTENT ══════════════════════════════ -->
@@ -128,5 +101,7 @@
 
 
   <script src="assets/js/main.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="assets/js/auth.js"></script>
 </body>
 </html>
